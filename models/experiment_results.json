@@ -1,0 +1,94 @@
+{
+  "classes": [
+    "lily",
+    "other_flowers"
+  ],
+  "dataset_size": {
+    "total": 1034,
+    "train": 828,
+    "val": 206
+  },
+  "scratch_cnn": {
+    "best_val_accuracy": 0.5922330097087378,
+    "final_val_loss": 0.6721604356487978,
+    "classification_report": {
+      "lily": {
+        "precision": 0.6071428571428571,
+        "recall": 0.6296296296296297,
+        "f1-score": 0.6181818181818182,
+        "support": 108.0
+      },
+      "other_flowers": {
+        "precision": 0.574468085106383,
+        "recall": 0.5510204081632653,
+        "f1-score": 0.5625,
+        "support": 98.0
+      },
+      "accuracy": 0.5922330097087378,
+      "macro avg": {
+        "precision": 0.59080547112462,
+        "recall": 0.5903250188964475,
+        "f1-score": 0.5903409090909091,
+        "support": 206.0
+      },
+      "weighted avg": {
+        "precision": 0.5915985481157967,
+        "recall": 0.5922330097087378,
+        "f1-score": 0.5916924095322154,
+        "support": 206.0
+      }
+    },
+    "confusion_matrix": [
+      [
+        68,
+        40
+      ],
+      [
+        44,
+        54
+      ]
+    ]
+  },
+  "transfer_learning": {
+    "model_architecture": "MobileNetV2 (Pre-trained on ImageNet)",
+    "best_val_accuracy": 0.6650485436893204,
+    "final_val_loss": 0.7126372207715673,
+    "classification_report": {
+      "lily": {
+        "precision": 0.672566371681416,
+        "recall": 0.7037037037037037,
+        "f1-score": 0.6877828054298643,
+        "support": 108.0
+      },
+      "other_flowers": {
+        "precision": 0.6559139784946236,
+        "recall": 0.6224489795918368,
+        "f1-score": 0.6387434554973822,
+        "support": 98.0
+      },
+      "accuracy": 0.6650485436893204,
+      "macro avg": {
+        "precision": 0.6642401750880198,
+        "recall": 0.6630763416477703,
+        "f1-score": 0.6632631304636232,
+        "support": 206.0
+      },
+      "weighted avg": {
+        "precision": 0.6646443593886701,
+        "recall": 0.6650485436893204,
+        "f1-score": 0.6644534059474214,
+        "support": 206.0
+      }
+    },
+    "confusion_matrix": [
+      [
+        76,
+        32
+      ],
+      [
+        37,
+        61
+      ]
+    ]
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "name": "lily-flower-classifier",
+  "version": "1.0.0",
+  "description": "Deep Learning Lily Flower Classification hosted on Vercel",
+  "scripts": {
+    "start": "npx serve public"
+  }
+}

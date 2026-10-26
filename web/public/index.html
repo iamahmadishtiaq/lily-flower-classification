@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🌸 Lily Flower Classifier</title>
+  <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web@1.19.2/dist/ort.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    body { background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%); min-height: 100vh; padding: 30px 15px; color: #1f2937; }
+    .container { max-width: 720px; margin: 0 auto; background: #ffffff; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.08); padding: 36px 28px; }
+    header { text-align: center; margin-bottom: 28px; }
+    h1 { font-size: 28px; font-weight: 800; color: #111827; margin-bottom: 6px; }
+    p.subtitle { color: #6b7280; font-size: 14px; }
+    .badge-bar { display: flex; justify-content: center; gap: 8px; margin-top: 12px; }
+    .tag { font-size: 11px; padding: 4px 10px; border-radius: 20px; background: #f3f4f6; color: #4b5563; font-weight: 600; }
+    
+    .dropzone { border: 2.5px dashed #cbd5e1; border-radius: 16px; padding: 36px 20px; text-align: center; cursor: pointer; transition: all 0.2s ease; background: #fafafa; margin-bottom: 20px; }
+    .dropzone:hover { border-color: #10b981; background: #f0fdf4; }
+    .dropzone.dragover { border-color: #10b981; background: #ecfdf5; transform: scale(1.01); }
+    .dropzone input { display: none; }
+    .icon { font-size: 44px; margin-bottom: 10px; }
+    .dropzone h3 { font-size: 16px; font-weight: 600; color: #374151; margin-bottom: 4px; }
+    .dropzone p { font-size: 12px; color: #9ca3af; }
+    
+    .preview-box { text-align: center; margin: 20px 0; display: none; }
+    .preview-box img { max-height: 260px; max-width: 100%; border-radius: 14px; box-shadow: 0 6px 18px rgba(0,0,0,0.12); object-fit: cover; }
+    
+    .status-msg { text-align: center; font-size: 13px; color: #6b7280; margin: 10px 0; display: none; }
+    
+    .results-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 24px; }
+    @media (max-width: 600px) { .results-grid { grid-template-columns: 1fr; } }
+    
+    .card { background: #f9fafb; border: 1.5px solid #e5e7eb; border-radius: 14px; padding: 18px; position: relative; }
+    .card.highlight { border-color: #10b981; background: #f0fdf4; }
+    .card-title { font-size: 13px; font-weight: 700; color: #374151; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+    .winner-badge { font-size: 10px; background: #10b981; color: white; padding: 2px 8px; border-radius: 10px; }
+    .pred-label { font-size: 22px; font-weight: 800; color: #111827; margin-bottom: 4px; }
+    .pred-conf { font-size: 13px; color: #4b5563; margin-bottom: 12px; }
+    
+    .bar-wrap { background: #e5e7eb; height: 8px; border-radius: 4px; overflow: hidden; margin-top: 6px; }
+    .bar-fill { height: 100%; background: #10b981; border-radius: 4px; transition: width 0.4s ease; }
+    .bar-fill.red { background: #ef4444; }
+    
+    .breakdown { display: flex; justify-content: space-between; font-size: 11px; color: #6b7280; margin-top: 6px; }
+    
+    footer { text-align: center; margin-top: 28px; padding-top: 18px; border-top: 1px solid #e5e7eb; font-size: 12px; color: #9ca3af; }
+    footer a { color: #10b981; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🌸 Lily Flower Classifier</h1>
+      <p class="subtitle">Scratch CNN vs. Transfer Learning (MobileNetV2)</p>
+      <div class="badge-bar">
+        <span class="tag">⚡ ONNX Runtime Web</span>
+        <span class="tag">📱 Client-Side Inference</span>
+        <span class="tag">🌿 1000+ Training Images</span>
+      </div>
+    </header>
+
+    <div class="dropzone" id="dropzone" onclick="document.getElementById('fileInput').click()">
+      <div class="icon">📷</div>
+      <h3>Click to upload flower photo</h3>
+      <p>or drag and drop JPG, PNG, WEBP image</p>
+      <input type="file" id="fileInput" accept="image/*" onchange="handleFile(this.files[0])" />
+    </div>
+
+    <div class="preview-box" id="previewBox">
+      <img id="previewImg" alt="Preview" />
+    </div>
+
+    <div class="status-msg" id="statusMsg">Loading neural network models...</div>
+
+    <div class="results-grid" id="resultsGrid" style="display: none;">
+      <!-- Scratch CNN Card -->
+      <div class="card" id="cardScratch">
+        <div class="card-title">
+          <span>🧠 Custom CNN (Scratch)</span>
+        </div>
+        <div class="pred-label" id="labelScratch">--</div>
+        <div class="pred-conf" id="confScratch">Confidence: --%</div>
+        <div class="bar-wrap">
+          <div class="bar-fill" id="barScratch" style="width: 0%;"></div>
+        </div>
+        <div class="breakdown">
+          <span>Lily: <strong id="lilyScratch">--%</strong></span>
+          <span>Other: <strong id="otherScratch">--%</strong></span>
+        </div>
+      </div>
+
+      <!-- Transfer Learning Card -->
+      <div class="card highlight" id="cardTransfer">
+        <div class="card-title">
+          <span>🚀 MobileNetV2 (Transfer)</span>
+          <span class="winner-badge">Top Accuracy</span>
+        </div>
+        <div class="pred-label" id="labelTransfer">--</div>
+        <div class="pred-conf" id="confTransfer">Confidence: --%</div>
+        <div class="bar-wrap">
+          <div class="bar-fill" id="barTransfer" style="width: 0%;"></div>
+        </div>
+        <div class="breakdown">
+          <span>Lily: <strong id="lilyTransfer">--%</strong></span>
+          <span>Other: <strong id="otherTransfer">--%</strong></span>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      Trained on self-collected botanical dataset &bull; Hosted on Vercel &bull; 
+      <a href="https://github.com/iamahmadishtiaq/lily-flower-classification" target="_blank">View GitHub Repo</a>
+    </footer>
+  </div>
+
+  <canvas id="hiddenCanvas" width="224" height="224" style="display: none;"></canvas>
+
+  <script>
+    let sessionTransfer = null;
+    let sessionScratch = null;
+    const CLASSES = ['Lily 🌸', 'Other Flowers 🌼'];
+
+    const dropzone = document.getElementById('dropzone');
+    dropzone.addEventListener('dragover', (e) => { e.preventDefault(); dropzone.classList.add('dragover'); });
+    dropzone.addEventListener('dragleave', () => dropzone.classList.remove('dragover'));
+    dropzone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropzone.classList.remove('dragover');
+      if (e.dataTransfer.files.length > 0) handleFile(e.dataTransfer.files[0]);
+    });
+
+    async function loadModels() {
+      const msg = document.getElementById('statusMsg');
+      msg.style.display = 'block';
+      msg.innerText = 'Loading AI models in browser...';
+      try {
+        sessionTransfer = await ort.InferenceSession.create('./models/mobilenetv2_lily.onnx', { executionProviders: ['wasm'] });
+        sessionScratch = await ort.InferenceSession.create('./models/custom_cnn_lily.onnx', { executionProviders: ['wasm'] });
+        msg.style.display = 'none';
+      } catch (err) {
+        msg.innerText = 'Model load notice: running demo inference mode (' + err.message + ')';
+      }
+    }
+
+    loadModels();
+
+    function handleFile(file) {
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = document.getElementById('previewImg');
+        img.src = e.target.result;
+        document.getElementById('previewBox').style.display = 'block';
+        img.onload = () => runInference(img);
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function preprocess(imageElement) {
+      const canvas = document.getElementById('hiddenCanvas');
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(imageElement, 0, 0, 224, 224);
+      const imgData = ctx.getImageData(0, 0, 224, 224).data;
+
+      const mean = [0.485, 0.456, 0.406];
+      const std = [0.229, 0.224, 0.225];
+
+      const floatData = new Float32Array(1 * 3 * 224 * 224);
+      const channelSize = 224 * 224;
+
+      for (let i = 0; i < channelSize; i++) {
+        const r = imgData[i * 4] / 255.0;
+        const g = imgData[i * 4 + 1] / 255.0;
+        const b = imgData[i * 4 + 2] / 255.0;
+
+        floatData[i] = (r - mean[0]) / std[0];
+        floatData[channelSize + i] = (g - mean[1]) / std[1];
+        floatData[2 * channelSize + i] = (b - mean[2]) / std[2];
+      }
+
+      return new ort.Tensor('float32', floatData, [1, 3, 224, 224]);
+    }
+
+    function softmax(arr) {
+      const max = Math.max(...arr);
+      const exp = arr.map(x => Math.exp(x - max));
+      const sum = exp.reduce((a, b) => a + b, 0);
+      return exp.map(x => x / sum);
+    }
+
+    async function runInference(img) {
+      const msg = document.getElementById('statusMsg');
+      msg.style.display = 'block';
+      msg.innerText = 'Analyzing flower features...';
+
+      try {
+        const tensor = preprocess(img);
+
+        // 1. MobileNetV2
+        let pTransfer = [0.5, 0.5];
+        if (sessionTransfer) {
+          const outT = await sessionTransfer.run({ input: tensor });
+          pTransfer = softmax(Array.from(outT.output.data));
+        }
+
+        // 2. Custom CNN
+        let pScratch = [0.5, 0.5];
+        if (sessionScratch) {
+          const outS = await sessionScratch.run({ input: tensor });
+          pScratch = softmax(Array.from(outS.output.data));
+        }
+
+        updateUI('Transfer', pTransfer);
+        updateUI('Scratch', pScratch);
+
+        document.getElementById('resultsGrid').style.display = 'grid';
+        msg.style.display = 'none';
+      } catch (err) {
+        msg.innerText = 'Error running inference: ' + err.message;
+      }
+    }
+
+    function updateUI(prefix, probs) {
+      const idx = probs[0] > probs[1] ? 0 : 1;
+      const conf = (probs[idx] * 100).toFixed(1);
+      const lilyPct = (probs[0] * 100).toFixed(1);
+      const otherPct = (probs[1] * 100).toFixed(1);
+
+      document.getElementById('label' + prefix).innerText = CLASSES[idx];
+      document.getElementById('conf' + prefix).innerText = 'Confidence: ' + conf + '%';
+      document.getElementById('lily' + prefix).innerText = lilyPct + '%';
+      document.getElementById('other' + prefix).innerText = otherPct + '%';
+
+      const bar = document.getElementById('bar' + prefix);
+      bar.style.width = lilyPct + '%';
+      if (idx === 1) {
+        bar.classList.add('red');
+      } else {
+        bar.classList.remove('red');
+      }
+    }
+  </script>
+</body>
+</html>
