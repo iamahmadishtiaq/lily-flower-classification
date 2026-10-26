@@ -44,10 +44,10 @@ def build_transfer_model(num_classes=2):
     model = models.mobilenet_v2(weights=None)
     in_features = model.classifier[1].in_features
     model.classifier = nn.Sequential(
-        nn.Dropout(0.3),
-        nn.Linear(in_features, 256),
+        nn.Dropout(0.2),
+        nn.Linear(in_features, 128),
         nn.ReLU(inplace=True),
-        nn.Dropout(0.3),
-        nn.Linear(256, num_classes)
+        nn.Dropout(0.2),
+        nn.Linear(128, num_classes)
     )
     return model
