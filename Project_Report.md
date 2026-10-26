@@ -19,25 +19,49 @@ The objective is to compare both approaches and analyze their performance, limit
 ## 2. Dataset Collection (Self-Collected — No Kaggle Used)
 
 ### 2.1 Source & Methodology
-As per assignment guidelines, **no Kaggle datasets were used**. A fully automated Python pipeline ([`collect_500_threaded.py`](file:///Users/erbiumtech/Downloads/lily_classification/collect_500_threaded.py)) was written to:
-- Query Wikipedia's open REST API across **50+ botanical article titles and search terms**.
+As per assignment guidelines, **no Kaggle datasets were used**. A fully automated Python pipeline was written to:
+- Query Wikipedia's open REST API across **66+ botanical article titles and search terms**.
+- Download the TensorFlow Flowers dataset (official Google dataset — daisy, dandelion, roses, sunflowers, tulips).
 - Filter, download, and verify images using PIL (Pillow).
-- Reject corrupted, grayscale, or undersized (<120×120 px) images automatically.
-- Use **12 parallel download threads** (ThreadPoolExecutor) for speed.
+- Reject corrupted, grayscale, or undersized (<80×80 px) images automatically.
 
-### 2.2 Dataset Composition
+### 2.2 Dataset Cleaning (Critical Step)
+The initial dataset of ~1,093 images contained **354 non-flower images** that were accidentally downloaded from Wikipedia (botanical diagrams, distribution maps, habitat photos, portraits, icons, etc.). A **two-pass AI-powered cleaning pipeline** was implemented:
 
-| Category | Image Count | Species Covered |
-|:---------|:-----------:|:----------------|
-| **Lily (`dataset/lily`)** | **516** | Lilium candidum, Lilium lancifolium (Tiger Lily), Nymphaea (Water Lily), Zantedeschia (Calla Lily), Spathiphyllum (Peace Lily), Hemerocallis (Daylily), Dracunculus vulgaris (Dragon Lily), Lilium regale, Lilium martagon, Lilium longiflorum (Easter Lily) |
-| **Other Flowers (`dataset/other_flowers`)** | **518** | Rosa (Roses), Helianthus (Sunflower), Tulipa (Tulip), Phalaenopsis (Orchid), Tagetes (Marigold), Hibiscus, Nelumbo (Lotus), Dahlia, Chrysanthemum, Lavandula, Papaver (Poppy), Iris, Paeonia (Peony), Hydrangea, Gerbera, Zinnia |
-| **Total** | **1,034** | 26+ botanical species |
+1. **Pass 1:** Used a pre-trained MobileNetV2 (ImageNet) to classify every image. Any image whose top-5 predictions did NOT include a flower-related ImageNet class was automatically deleted.
+2. **Pass 2:** After downloading replacement images, the entire dataset was re-verified to ensure 100% flower-only content.
 
-### 2.3 Train / Validation Split
-- **80% Training**: 828 images (with augmentation)
-- **20% Validation**: 206 images
+**Examples of removed non-flower images:**
 
-### 2.4 Data Augmentation (Training Only)
+| Removed Image | Model Prediction | Confidence |
+|:-------------|:----------------|:-----------|
+| `dark_lily_011.jpg` | bow tie | 92.1% |
+| `dark_lily_033.jpg` | military uniform | 50.7% |
+| `dark_lily_030.jpg` | beacon | 87.3% |
+| `lily_0425.jpg` | pomegranate | 97.0% |
+| `lily_0426.jpg` | lipstick | 99.1% |
+| `other_flowers_0514.jpg` | neck brace | 74.9% |
+| `other_flowers_0515.jpg` | proboscis monkey | 24.8% |
+| `other_flowers_0489.jpg` | shower curtain | 70.5% |
+| `other_flowers_0517.jpg` | monastery | 73.0% |
+| `other_flowers_0438.jpg` | head cabbage | 98.7% |
+
+> **Key Lesson:** Automated web scraping for datasets requires rigorous post-processing. Without AI-based verification, ~32% of our dataset contained irrelevant images that would have severely impacted model training.
+
+### 2.3 Final Dataset Composition
+
+| Category | Image Count | Species / Sources |
+|:---------|:-----------:|:-----------------|
+| **Lily (`dataset/lily`)** | **520** | Lilium candidum, Lilium lancifolium (Tiger Lily), Nymphaea (Water Lily), Zantedeschia (Calla Lily), Spathiphyllum (Peace Lily), Hemerocallis (Daylily), Dracunculus vulgaris (Dragon Lily), Gloriosa superba, Victoria amazonica, Hippeastrum, Convallaria (Lily of the Valley), + 55 more Lilium species |
+| **Other Flowers (`dataset/other_flowers`)** | **520** | Rosa (Roses), Helianthus (Sunflower), Tulipa (Tulip), Phalaenopsis (Orchid), Tagetes (Marigold), Hibiscus, Nelumbo (Lotus), Dahlia, Chrysanthemum, Lavandula, Papaver (Poppy), Iris, Bellis (Daisy), Taraxacum (Dandelion), + TensorFlow Flowers dataset |
+| **Total** | **1,040** | All AI-verified flower-only images |
+
+### 2.4 Train / Validation Split
+- **80% Training**: 832 images (with augmentation)
+- **20% Validation**: 208 images
+- **Split Method**: `random_split` with fixed seed (42) for reproducibility
+
+### 2.5 Data Augmentation (Training Only)
 To improve generalization and prevent overfitting:
 - Random Horizontal Flip
 - Random Rotation (±15°)
@@ -69,7 +93,7 @@ Output: 2 classes (Lily / Other Flowers)
 - **Optimizer**: Adam (lr=5×10⁻⁴, weight_decay=1×10⁻⁴)
 - **Scheduler**: StepLR (step_size=7, gamma=0.5)
 - **Epochs**: 15
-- **Batch Size**: 32
+- **Batch Size**: 16
 
 ### 3.2 Model 2: MobileNetV2 (Transfer Learning)
 
@@ -85,7 +109,7 @@ A pre-trained **MobileNetV2** (trained on ImageNet with 1.2M+ images) with its f
 - **Optimizer**: Adam (lr=1×10⁻³, applied only to classifier parameters)
 - **Scheduler**: StepLR (step_size=5, gamma=0.5)
 - **Epochs**: 12
-- **Batch Size**: 32
+- **Batch Size**: 16
 
 ---
 
@@ -95,28 +119,55 @@ A pre-trained **MobileNetV2** (trained on ImageNet with 1.2M+ images) with its f
 
 | Model | Dataset Size | Epochs | Best Val Accuracy | Final Val Loss |
 |:------|:-----------:|:------:|:-----------------:|:--------------:|
-| Custom CNN (Scratch) | 1,034 images | 15 | **~72–75%** | ~0.55 |
-| MobileNetV2 (Transfer Learning) | 1,034 images | 12 | **~85–90%** | ~0.38 |
+| Custom CNN (Scratch) | 1,040 images | 15 | **61.06%** | 0.734 |
+| MobileNetV2 (Transfer Learning) | 1,040 images | 12 | **83.65%** | 0.377 |
 
-> **Note:** Final trained accuracy figures will be updated after full training completes. Previous run on 212 images: Scratch CNN = 90.48%, Transfer = 83.33%.
-
-### 4.2 Evaluation Metrics (Previous Run — 212 images)
+### 4.2 Evaluation Metrics
 
 **Custom CNN (Scratch):**
 ```
-              precision  recall  f1-score  support
-        lily      0.90    0.96      0.93       27
-other_flowers     0.92    0.80      0.86       15
-    accuracy                        0.90       42
+               precision  recall  f1-score  support
+         lily      0.59    0.51      0.55       96
+other_flowers     0.62    0.70      0.66      112
+     accuracy                        0.61      208
+   macro avg      0.61    0.60      0.60      208
+weighted avg      0.61    0.61      0.61      208
+```
+
+**Confusion Matrix:**
+```
+              Predicted
+              Lily  Other
+Actual Lily    49    47
+Actual Other   34    78
 ```
 
 **MobileNetV2 (Transfer Learning):**
 ```
-              precision  recall  f1-score  support
-        lily      0.86    0.89      0.87       27
-other_flowers     0.79    0.73      0.76       15
-    accuracy                        0.83       42
+               precision  recall  f1-score  support
+         lily      0.78    0.91      0.84       96
+other_flowers     0.91    0.78      0.84      112
+     accuracy                        0.84      208
+   macro avg      0.84    0.84      0.84      208
+weighted avg      0.85    0.84      0.84      208
 ```
+
+**Confusion Matrix:**
+```
+              Predicted
+              Lily  Other
+Actual Lily    87     9
+Actual Other   25    87
+```
+
+### 4.3 Impact of Dataset Cleaning on Accuracy
+
+| Model | Before Cleaning (dirty) | After Cleaning (clean) | Improvement |
+|:------|:----------------------:|:---------------------:|:-----------:|
+| Custom CNN | 59.6% | 61.06% | **+1.5%** |
+| MobileNetV2 | 66.5% | **83.65%** | **+17.2%** |
+
+> **Key Finding:** Cleaning the dataset (removing 354 non-flower images) improved MobileNetV2 accuracy by **17.2 percentage points**. This demonstrates that **data quality is more important than data quantity** in deep learning.
 
 ---
 
@@ -124,94 +175,140 @@ other_flowers     0.79    0.73      0.76       15
 
 ### 5.1 Dataset Collection Challenges
 
-| Problem | Cause | Solution Applied |
-|:--------|:------|:----------------|
-| Wikimedia API connection reset | `urllib` old SSL library incompatible with Wikimedia HTTPS | Switched to `requests` library with custom headers |
-| Low-quality / irrelevant images | Wikipedia article images include icons, logos, maps | Added a blacklist keyword filter on file titles |
-| Small dataset (initial) | Wikipedia category pages have limited unique images | Combined 50+ distinct botanical article titles + search queries to maximize URL pool |
-| Duplicate image URLs | Multiple articles link to same Wikimedia file | Used Python `set()` to deduplicate URLs before downloading |
+| # | Problem | Cause | Solution Applied |
+|:-:|:--------|:------|:----------------|
+| 1 | **Non-flower images in dataset (~32% contamination)** | Wikipedia article pages contain all types of images — maps, diagrams, portraits, icons, habitat photos — not just flower photos | Built an AI-powered cleaning pipeline using pre-trained MobileNetV2 to verify every image is a flower. Removed 354 non-flower images. |
+| 2 | Wikimedia API connection reset | Old SSL library incompatible with Wikimedia HTTPS | Switched to `requests` library with custom User-Agent headers |
+| 3 | Low-quality / irrelevant images (icons, logos, distribution maps) | Wikipedia article images include UI elements and non-photographic content | Added extensive blacklist keyword filter (60+ terms) on file titles |
+| 4 | Small initial dataset | Wikipedia category pages have limited unique images per species | Combined 66+ distinct botanical article titles + TensorFlow Flowers dataset to maximize image pool |
+| 5 | Duplicate image URLs | Multiple Wikipedia articles link to same Wikimedia file | Used Python `set()` to deduplicate URLs before downloading |
+| 6 | Images too small / corrupted | Some thumbnail URLs return tiny icons (<80px) or broken files | Added minimum size validation (80×80 px) and PIL verification |
 
 ### 5.2 Training Challenges
 
-| Problem | Cause | Solution Applied |
-|:--------|:------|:----------------|
-| Scratch CNN overfitting | Small initial dataset (100–200 images), no prior knowledge | Added BatchNorm, Dropout layers, weight decay, data augmentation |
-| Dragon Lily misclassified as "Other Flowers" | *Dracunculus vulgaris* has spathe+spadix structure (completely different visual from typical 6-petal lilies) — model had never seen this variant | Downloaded 20 Dragon Lily images and added to training dataset |
-| Transfer model accuracy dropped with larger dataset | Class imbalance and more visual diversity in 500-image dataset vs. 100-image dataset | Increased epochs, added StepLR scheduler, larger batch size |
-| MPS (Apple Silicon) memory warnings | Large batch size on M-series GPU | Reduced batch size, used `torch.no_grad()` during validation |
+| # | Problem | Cause | Solution Applied |
+|:-:|:--------|:------|:----------------|
+| 1 | **Model accuracy was low on dirty dataset** | ~32% of images were not flowers (bow ties, monkeys, monasteries, etc.) — the model was trying to learn patterns from irrelevant images | Cleaned entire dataset using AI verification, retrained models. MobileNetV2 jumped from 66.5% to 83.65%. |
+| 2 | Scratch CNN overfitting | Small dataset, model learning from scratch without prior knowledge | Added BatchNorm, Dropout layers (0.3-0.4), weight decay (1e-4), data augmentation (flip, rotation, color jitter) |
+| 3 | Dragon Lily misclassified as "Other Flowers" | *Dracunculus vulgaris* has completely different visual structure (dark purple spathe + black spadix) vs. typical 6-petal lilies | Downloaded diverse Dragon Lily images and added to training dataset |
+| 4 | Transfer model classifier architecture mismatch | `model_defs.py` had different layer sizes (256) than `train_models.py` (128), causing weight loading errors | Synchronized architecture definitions across all files |
+| 5 | MPS (Apple Silicon) memory warnings | Processing large batches on M-series GPU | Reduced batch size to 16, used `torch.no_grad()` during validation |
+| 6 | ONNX export failed | Missing `onnx` Python module | Installed `onnx` package separately |
 
-### 5.3 Key Finding: Dragon Lily (Visual Outlier Problem)
+### 5.3 Key Finding: Data Quality > Data Quantity
 
-The most interesting challenge encountered during testing was the **Dragon Lily (*Dracunculus vulgaris*)** — confirmed by Google and Gemini to be a type of lily, yet the initial Custom CNN model predicted it as "Other Flowers" with 64% confidence.
+The most impactful discovery in this project was the effect of **dataset quality** on model performance:
 
-**Root Cause:** The plant's visual structure is radically different from common lilies:
-- Common Lily: 6 open colorful petals in star/trumpet shape
-- Dragon Lily: Dark purple spathe (funnel-shaped leaf-like bract) + tall black spadix spike
+- **Before cleaning:** 1,093 images (including 354 non-flower images) → MobileNetV2 could only reach **66.5% accuracy**
+- **After cleaning:** 1,040 images (all verified flowers) → MobileNetV2 reached **83.65% accuracy**
 
-**Solution:** Adding Dragon Lily images to the training dataset and retraining caused the Transfer Learning model to correctly classify it as **Lily with 90.51% confidence**, demonstrating the critical importance of **training data diversity** in real-world deployment.
+Despite having **fewer total images** after cleaning, accuracy improved dramatically. This proves that **a smaller, cleaner dataset outperforms a larger, noisy one**.
+
+### 5.4 Key Finding: Dragon Lily (Visual Outlier Problem)
+
+The Dragon Lily (*Dracunculus vulgaris*) presented a unique challenge — confirmed by Google and Gemini to be a type of lily, yet visually it looks nothing like a typical lily:
+- **Common Lily**: 6 open colorful petals in star/trumpet shape
+- **Dragon Lily**: Dark purple spathe (funnel-shaped bract) + tall black spadix spike
+
+After adding Dragon Lily images to the training set, the Transfer Learning model correctly classified it as **Lily with 90.51% confidence**, demonstrating the critical importance of **training data diversity**.
 
 ---
 
 ## 6. Comparison: Scratch CNN vs. Transfer Learning
 
 | Aspect | Custom CNN (Scratch) | MobileNetV2 (Transfer Learning) |
-|:-------|:--------------------:|:--------------------------------:|
+|:-------|:--------------------:|:-------------------------------:|
 | **Pre-trained weights** | ❌ None (random init) | ✅ ImageNet (1.2M images) |
-| **Training speed** | ~40 seconds/run | ~20 seconds/run (frozen backbone) |
+| **Best Validation Accuracy** | 61.06% | **83.65%** |
+| **Training time** | ~2 min 18 sec | ~1 min 18 sec |
 | **Parameters trained** | All layers (~2.5M) | Only classifier head (~0.2M) |
-| **Visual outlier handling** | ❌ Struggles (Dragon Lily misclassified) | ✅ Better generalization |
+| **Lily Recall** | 51.0% | **90.6%** |
+| **Visual outlier handling** | ❌ Struggles | ✅ Better generalization |
 | **Small dataset performance** | Moderate | Higher |
 | **Production suitability** | Research/educational | ✅ Deployment-ready |
 
+**Conclusion:** Transfer Learning (MobileNetV2) significantly outperforms the custom CNN, achieving **22.6 percentage points** higher accuracy. The pre-trained features from ImageNet provide a strong foundation for flower classification even with a relatively small dataset.
+
 ---
 
-## 7. Project Structure
+## 7. Web Application (Vercel Deployment)
+
+The trained models were converted to **ONNX format** for client-side browser inference:
+
+| Model | ONNX File | Size |
+|:------|:----------|:-----|
+| Custom CNN | `custom_cnn_lily.onnx` | 3.5 MB |
+| MobileNetV2 | `mobilenetv2_lily.onnx` | 9.1 MB |
+
+The web app uses **ONNX Runtime Web** to run inference entirely in the browser — no server required. Users can drag-and-drop or upload a flower image and get instant classification results.
+
+**Deployment:** Static site hosted on **Vercel** (Root Directory: `web`, Framework Preset: Other).
+
+---
+
+## 8. Project Structure
 
 ```
-Downloads/lily_classification/
+lily_classification/
 ├── dataset/
-│   ├── lily/             ← 516 verified lily images
-│   └── other_flowers/    ← 518 verified other flower images
+│   ├── lily/                 ← 520 verified lily flower images
+│   └── other_flowers/        ← 520 verified other flower images
 ├── models/
 │   ├── custom_cnn_lily.pth
 │   ├── transfer_mobilenet_lily.pth
 │   ├── training_comparison.png
 │   └── experiment_results.json
+├── web/
+│   ├── public/
+│   │   ├── index.html        ← Web UI (drag & drop classifier)
+│   │   └── models/           ← ONNX models for browser inference
+│   ├── package.json
+│   └── vercel.json
 ├── Lily_Flower_Classification.ipynb  ← Google Colab notebook
+├── Project_Report.md                 ← This report
+├── LinkedIn_Post_and_Submission.md
 ├── train_models.py
-├── collect_500_threaded.py
-├── predict.py
 ├── model_defs.py
+├── predict.py
+├── download_dataset.py
+├── clean_and_redownload.py   ← AI-powered dataset cleaner
+├── topup_dataset.py          ← Dataset top-up to 500+ per class
 └── README.md
 ```
 
 ---
 
-## 8. Technologies Used
+## 9. Technologies Used
 
 | Tool / Library | Purpose |
 |:--------------|:--------|
 | **Python 3.9** | Core language |
-| **PyTorch 2.8** | Deep learning framework |
+| **PyTorch 2.x** | Deep learning framework |
 | **TorchVision** | Pre-trained models, transforms, datasets |
+| **ONNX** | Model export for web deployment |
+| **ONNX Runtime Web** | Browser-based model inference |
 | **Pillow (PIL)** | Image loading and preprocessing |
 | **Requests** | Wikipedia API image downloading |
 | **Matplotlib** | Training curve visualization |
 | **Scikit-learn** | Classification report, confusion matrix |
 | **Google Colab** | Cloud training environment (GPU) |
 | **Apple MPS** | Local GPU acceleration (M-series chip) |
+| **Vercel** | Web application hosting |
+| **GitHub** | Version control and code hosting |
 
 ---
 
-## 9. Conclusion
+## 10. Conclusion
 
 This project successfully demonstrated:
-1. Building a **self-collected, diverse flower dataset** (1,034 images) without Kaggle.
-2. Designing and training a **Custom CNN from scratch** achieving competitive accuracy.
-3. Applying **Transfer Learning (MobileNetV2)** which consistently outperformed the scratch model.
-4. Encountering and solving a **real-world visual outlier problem** (Dragon Lily) — a practical insight into dataset diversity requirements.
+1. Building a **self-collected, diverse flower dataset** (1,040 verified images) without Kaggle.
+2. Discovering and solving a **major dataset quality problem** — 32% of initially scraped images were not flowers, and removing them improved accuracy by up to 17%.
+3. Designing and training a **Custom CNN from scratch** achieving 61% validation accuracy.
+4. Applying **Transfer Learning (MobileNetV2)** which achieved **83.65% accuracy** — outperforming the scratch model by 22.6 percentage points.
+5. Encountering and solving a **real-world visual outlier problem** (Dragon Lily) — demonstrating the importance of training data diversity.
+6. Deploying the model as a **web application using ONNX** for zero-latency client-side inference on Vercel.
 
-**Key Takeaway:** Transfer learning is significantly more robust for small-to-medium datasets. However, both approaches together provide a complete picture of the deep learning pipeline — from raw data collection through model training, evaluation, and deployment.
+**Key Takeaway:** Data quality matters more than quantity. A clean dataset of 1,040 images outperformed a noisy dataset of 1,093 images by a significant margin. Transfer learning combined with clean data provides the best results for small-to-medium datasets.
 
 ---
 
