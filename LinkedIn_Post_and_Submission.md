@@ -28,7 +28,7 @@ As part of our coursework, I developed an end-to-end binary classification syste
 💻 GitHub: https://github.com/iamahmadishtiaq/lily-flower-classification
 📓 Colab Notebook: Included in repository with interactive image tester!
 
-Special thanks to my instructor [@Instructor Name] for the guidance throughout this assignment.
+Special thanks to my instructor Prof. Dr Munir Ahmad for the guidance throughout this semester project.
 
 #MachineLearning #DeepLearning #ComputerVision #PyTorch #TransferLearning #AI #WebML #Vercel #ONNX #DataQuality #StudentProject
 ```

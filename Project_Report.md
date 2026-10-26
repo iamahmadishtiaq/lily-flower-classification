@@ -1,8 +1,12 @@
-# Lily Flower Classification — Project Report
+# Lily Flower Classification — Semester Project Report
 
-**Student:** [Your Name Here]
-**Subject:** Deep Learning / Machine Learning
-**Date:** October 2026
+**Course / Subject:** Deep Learning  
+**Project Type:** Semester Project  
+**Student Name:** Ahmad Ishtiaq  
+**Roll No:** SU92-BSCSM-F23-318  
+**Section:** BSCS-7A  
+**Instructor:** Prof. Dr Munir Ahmad  
+**Date:** October 2026  
 
 ---
 
@@ -312,4 +316,4 @@ This project successfully demonstrated:
 
 ---
 
-*Report prepared as part of the Lily Flower Classification Deep Learning Assignment.*
+*Report prepared by Ahmad Ishtiaq (Roll No: SU92-BSCSM-F23-318, Section: BSCS-7A) as part of the Deep Learning Semester Project under the supervision of Prof. Dr Munir Ahmad.*
