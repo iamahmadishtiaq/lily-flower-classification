@@ -5,3 +5,5 @@ __pycache__/
 *.pyc
 lily_project_bundle.zip
 dataset/
+temp_audio/
+temp_clips/

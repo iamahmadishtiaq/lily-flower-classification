@@ -200,7 +200,7 @@ The web frontend includes a dedicated **Project Resources & Downloads Hub** comp
 2. 📄 **Project Report (PDF):** Full academic report in PDF format.
 3. 📝 **Project Report (Word / DOCX):** Editable academic report.
 4. 📊 **Presentation Slides (PPTX):** 10-slide executive presentation.
-5. 💼 **LinkedIn Post:** Live post link: [https://lnkd.in/p/d3C-vc7q](https://lnkd.in/p/d3C-vc7q).
+5. 💼 **LinkedIn Post:** Live post link: [https://lnkd.in/p/dKsvaJrU](https://lnkd.in/p/dKsvaJrU).
 6. 💻 **GitHub Repository:** Open-source code, weights, and documentation: [https://github.com/iamahmadishtiaq/lily-flower-classification](https://github.com/iamahmadishtiaq/lily-flower-classification).
 7. 🧠 **Model Weights (.pth):** Directly crawlable PyTorch model weights for automated grading scripts:
    - `custom_cnn_lily.pth` (3.6 MB)
