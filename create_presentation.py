@@ -275,7 +275,7 @@ add_card(s9, Inches(6.8), Inches(1.8), Inches(5.7), Inches(4.8), "🌐 Frontend 
     "  • 📦 Download Dataset ZIP (35 MB)",
     "  • 📄 Download Project Report (PDF & DOCX)",
     "  • 📊 Download Presentation Slides (PPTX)",
-    "  • 💼 View LinkedIn Post & GitHub Repository"
+    "  • 💼 View LinkedIn Post (https://lnkd.in/p/d3C-vc7q) & GitHub Repository"
 ])
 
 # ─── Slide 10: Conclusion & Summary ───

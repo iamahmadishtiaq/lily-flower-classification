@@ -60,3 +60,4 @@ Roll No: SU92-BSCSM-F23-318 | Section: BSCS-7A
 | **Dataset Download** | Direct download available on frontend (`web/public/downloads/dataset.zip`) |
 | **Project Report** | `Project_Report.pdf` / `Project_Report.docx` (downloadable on frontend) |
 | **Presentation Slides** | `Lily_Classification_Presentation.pptx` (downloadable on frontend) |
+| **LinkedIn Post URL** | `https://lnkd.in/p/d3C-vc7q` |
