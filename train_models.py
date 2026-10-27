@@ -77,6 +77,16 @@ def build_transfer_model(num_classes=3):
     )
     return model
 
+class TransformedSubset(torch.utils.data.Dataset):
+    def __init__(self, subset, transform):
+        self.subset = subset
+        self.transform = transform
+    def __getitem__(self, idx):
+        x, y = self.subset[idx]
+        return self.transform(x), y
+    def __len__(self):
+        return len(self.subset)
+
 # 3. Training Loop Helper
 def train_model(model, train_loader, val_loader, criterion, optimizer, scheduler, num_epochs=15, device="cpu", model_name="model"):
     print(f"\n---> Starting training for: {model_name} on {device}")
@@ -208,21 +218,11 @@ def run_experiment():
     train_subset, val_subset = random_split(full_dataset, [train_size, val_size], generator=generator)
 
     # Apply transforms
-    class TransformedSubset(torch.utils.data.Dataset):
-        def __init__(self, subset, transform):
-            self.subset = subset
-            self.transform = transform
-        def __getitem__(self, idx):
-            x, y = self.subset[idx]
-            return self.transform(x), y
-        def __len__(self):
-            return len(self.subset)
-
     train_data = TransformedSubset(train_subset, data_transforms['train'])
     val_data = TransformedSubset(val_subset, data_transforms['val'])
 
-    train_loader = DataLoader(train_data, batch_size=16, shuffle=True, num_workers=0)
-    val_loader = DataLoader(val_data, batch_size=16, shuffle=False, num_workers=0)
+    train_loader = DataLoader(train_data, batch_size=64, shuffle=True, num_workers=0)
+    val_loader = DataLoader(val_data, batch_size=64, shuffle=False, num_workers=0)
 
     print(f"Total samples: {len(full_dataset)} | Training samples: {train_size} | Validation samples: {val_size}")
 
@@ -237,7 +237,7 @@ def run_experiment():
 
     scratch_model, scratch_history = train_model(
         scratch_model, train_loader, val_loader, criterion, optimizer_scratch,
-        scheduler_scratch, num_epochs=15, device=device, model_name="Custom CNN (Scratch)"
+        scheduler_scratch, num_epochs=5, device=device, model_name="Custom CNN (Scratch)"
     )
     scratch_report, scratch_cm = evaluate_model(scratch_model, val_loader, class_names, device, "Custom CNN (Scratch)")
     
@@ -256,7 +256,7 @@ def run_experiment():
 
     transfer_model, transfer_history = train_model(
         transfer_model, train_loader, val_loader, criterion, optimizer_transfer,
-        scheduler_transfer, num_epochs=12, device=device, model_name="MobileNetV2 (Transfer Learning)"
+        scheduler_transfer, num_epochs=4, device=device, model_name="MobileNetV2 (Transfer Learning)"
     )
     transfer_report, transfer_cm = evaluate_model(transfer_model, val_loader, class_names, device, "MobileNetV2 (Transfer Learning)")
 

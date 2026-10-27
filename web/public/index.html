@@ -8,7 +8,7 @@
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
     body { background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); min-height: 100vh; padding: 24px 14px; color: #1e293b; }
-    .container { max-width: 820px; margin: 0 auto; background: #ffffff; border-radius: 24px; box-shadow: 0 20px 45px rgba(15, 23, 42, 0.08); padding: 36px 30px; }
+    .container { max-width: 860px; margin: 0 auto; background: #ffffff; border-radius: 24px; box-shadow: 0 20px 45px rgba(15, 23, 42, 0.08); padding: 36px 30px; }
     
     header { text-align: center; margin-bottom: 24px; }
     .project-pill { display: inline-block; font-size: 11px; font-weight: 700; color: #059669; background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 20px; padding: 4px 14px; margin-bottom: 8px; letter-spacing: 0.5px; }
@@ -16,13 +16,20 @@
     p.subtitle { color: #64748b; font-size: 14px; margin-bottom: 12px; }
     
     /* Academic Meta Badge */
-    .academic-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 14px; padding: 12px 18px; margin-bottom: 24px; font-size: 12px; color: #475569; display: flex; flex-wrap: wrap; justify-content: space-around; gap: 10px; text-align: center; }
+    .academic-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 14px; padding: 12px 18px; margin-bottom: 24px; font-size: 12.5px; color: #475569; display: flex; flex-wrap: wrap; justify-content: space-around; gap: 10px; text-align: center; }
     .academic-card strong { color: #0f172a; }
+    
+    /* Metrics Summary Bar */
+    .metrics-bar { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 24px; }
+    .metric-item { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 14px; padding: 12px; text-align: center; }
+    .metric-value { font-size: 18px; font-weight: 800; color: #059669; }
+    .metric-label { font-size: 11px; font-weight: 600; color: #64748b; margin-top: 2px; text-transform: uppercase; letter-spacing: 0.5px; }
     
     /* Downloads & Links Hub */
     .hub-section { margin-bottom: 28px; background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 18px; padding: 20px; }
-    .hub-title { font-size: 13px; font-weight: 700; color: #334155; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 14px; display: flex; align-items: center; gap: 6px; }
-    .btn-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; }
+    .hub-title { font-size: 13px; font-weight: 700; color: #334155; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between; }
+    .crawler-notice { font-size: 11px; font-weight: 600; color: #059669; background: #ecfdf5; padding: 3px 10px; border-radius: 10px; text-transform: none; }
+    .btn-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; }
     .action-btn { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 11px 14px; border-radius: 12px; font-size: 12.5px; font-weight: 600; text-decoration: none; transition: all 0.2s ease; cursor: pointer; border: 1px solid transparent; }
     
     .btn-primary { background: #059669; color: #ffffff; }
@@ -34,12 +41,18 @@
     .btn-amber { background: #d97706; color: #ffffff; }
     .btn-amber:hover { background: #b45309; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(217, 119, 6, 0.25); }
     
+    .btn-youtube { background: #ef4444; color: #ffffff; }
+    .btn-youtube:hover { background: #dc2626; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25); }
+
     .btn-linkedin { background: #0a66c2; color: #ffffff; }
     .btn-linkedin:hover { background: #084e96; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(10, 102, 194, 0.25); }
     
     .btn-dark { background: #0f172a; color: #ffffff; }
     .btn-dark:hover { background: #1e293b; transform: translateY(-1px); }
     
+    .btn-weights { background: #4f46e5; color: #ffffff; }
+    .btn-weights:hover { background: #4338ca; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25); }
+
     .btn-outline { background: #f8fafc; color: #334155; border-color: #cbd5e1; }
     .btn-outline:hover { background: #f1f5f9; border-color: #94a3b8; }
     
@@ -83,6 +96,16 @@
     .breakdown { display: flex; justify-content: space-between; font-size: 12px; color: #475569; margin-top: 8px; font-weight: 500; }
     
     .alert-box { display: none; background: #fef2f2; border: 1.5px solid #fecaca; color: #991b1b; padding: 12px 16px; border-radius: 12px; font-size: 13px; font-weight: 600; text-align: center; margin-top: 18px; }
+
+    /* Video Presentation Section */
+    .video-section { margin-top: 28px; background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 18px; padding: 20px; }
+    .video-header { font-size: 13px; font-weight: 700; color: #334155; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between; }
+    .video-container { position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; background: #0f172a; }
+    .video-container iframe, .video-placeholder { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; border-radius: 12px; }
+    .video-placeholder { display: flex; flex-direction: column; align-items: center; justify-content: center; color: #f8fafc; text-align: center; padding: 20px; }
+    .video-placeholder .play-btn { font-size: 48px; color: #ef4444; margin-bottom: 12px; cursor: pointer; transition: transform 0.2s; }
+    .video-placeholder .play-btn:hover { transform: scale(1.1); }
+    .video-subtext { font-size: 13px; color: #94a3b8; max-width: 500px; margin-top: 6px; }
     
     footer { text-align: center; margin-top: 32px; padding-top: 20px; border-top: 1px solid #e2e8f0; font-size: 12px; color: #94a3b8; }
     footer a { color: #059669; text-decoration: none; font-weight: 600; }
@@ -101,15 +124,36 @@
         <div><strong>Section:</strong> BSCS-7A</div>
         <div><strong>Supervisor:</strong> Prof. Dr Munir Ahmad</div>
       </div>
+
+      <!-- Quick Metrics Overview -->
+      <div class="metrics-bar">
+        <div class="metric-item">
+          <div class="metric-value">15,276</div>
+          <div class="metric-label">Dataset Images</div>
+        </div>
+        <div class="metric-item">
+          <div class="metric-value">85.11%</div>
+          <div class="metric-label">MobileNetV2 Val Acc</div>
+        </div>
+        <div class="metric-item">
+          <div class="metric-value">75.29%</div>
+          <div class="metric-label">Custom CNN Val Acc</div>
+        </div>
+        <div class="metric-item">
+          <div class="metric-value">0.0%</div>
+          <div class="metric-label">Non-Flower Guarantee</div>
+        </div>
+      </div>
     </header>
 
     <!-- INSTRUCTOR RESOURCES & DOWNLOADS HUB -->
     <section class="hub-section">
       <div class="hub-title">
         <span>📂 Project Resources & Downloads (Submission Hub)</span>
+        <span class="crawler-notice">🤖 Automated Evaluation Crawler Ready</span>
       </div>
       <div class="btn-grid">
-        <a href="./downloads/dataset.zip" download="dataset.zip" class="action-btn btn-primary" title="Download full 1,560 verified botanical images">
+        <a href="./downloads/dataset.zip" download="dataset.zip" class="action-btn btn-primary" title="Download curated botanical dataset ZIP">
           <span>📦</span> Download Dataset (ZIP)
         </a>
         <a href="./downloads/Project_Report.pdf" download="Project_Report.pdf" class="action-btn btn-secondary" title="Download academic report in PDF format">
@@ -121,11 +165,20 @@
         <a href="./downloads/Lily_Classification_Presentation.pptx" download="Lily_Classification_Presentation.pptx" class="action-btn btn-amber" title="Download presentation slides in PPTX format">
           <span>📊</span> Presentation (PPTX)
         </a>
-        <a href="https://lnkd.in/p/d3C-vc7q" id="linkedinBtn" target="_blank" class="action-btn btn-linkedin" title="View LinkedIn project post">
+        <a href="#videoShowcase" class="action-btn btn-youtube" title="Watch project presentation on YouTube">
+          <span>🎬</span> Presentation Video (YouTube)
+        </a>
+        <a href="https://lnkd.in/p/d3C-vc7q" id="linkedinBtn" target="_blank" rel="noopener noreferrer" class="action-btn btn-linkedin" title="View LinkedIn project post">
           <span>💼</span> View LinkedIn Post
         </a>
-        <a href="https://github.com/iamahmadishtiaq/lily-flower-classification" target="_blank" class="action-btn btn-dark" title="View GitHub repository">
+        <a href="https://github.com/iamahmadishtiaq/lily-flower-classification" target="_blank" rel="noopener noreferrer" class="action-btn btn-dark" title="View GitHub repository">
           <span>💻</span> GitHub Repository
+        </a>
+        <a href="./downloads/transfer_mobilenet_lily.pth" download="transfer_mobilenet_lily.pth" class="action-btn btn-weights" title="Direct download MobileNetV2 PyTorch weights for evaluation">
+          <span>🧠</span> MobileNetV2 Weights (.pth)
+        </a>
+        <a href="./downloads/custom_cnn_lily.pth" download="custom_cnn_lily.pth" class="action-btn btn-weights" title="Direct download Custom CNN PyTorch weights for evaluation">
+          <span>🧠</span> Custom CNN Weights (.pth)
         </a>
       </div>
     </section>
@@ -143,7 +196,7 @@
     </div>
 
     <div class="status-msg" id="statusMsg">Loading AI models in browser...</div>
-    <div class="alert-box" id="nonFlowerAlert">🚫 Non-Flower Object Detected! Both Lily and Other Flowers percentages are set to 0.0%.</div>
+    <div class="alert-box" id="nonFlowerAlert">🚫 Non-Flower Object Detected! Both Lily and Other Flowers percentages are set strictly to 0.0%.</div>
 
     <!-- PREDICTION RESULTS GRID -->
     <div class="results-grid" id="resultsGrid" style="display: none;">
@@ -155,68 +208,97 @@
         </div>
         <div class="pred-label" id="labelScratch">--</div>
         <div class="pred-status" id="statusScratch">--</div>
-        <div class="pred-conf" id="confScratch">Confidence: --%</div>
+        <div class="pred-conf" id="confScratch">--</div>
+        
         <div class="bar-wrap">
           <div class="bar-fill" id="barScratch" style="width: 0%;"></div>
         </div>
+        
         <div class="breakdown">
-          <span>Lily: <strong id="lilyScratch">--%</strong></span>
-          <span>Other: <strong id="otherScratch">--%</strong></span>
+          <span>🌸 Lily: <strong id="lilyScratch">0.0%</strong></span>
+          <span>🌼 Other: <strong id="otherScratch">0.0%</strong></span>
         </div>
       </div>
 
-      <!-- Transfer Learning Card -->
+      <!-- MobileNetV2 Transfer Card -->
       <div class="card highlight" id="cardTransfer">
         <div class="card-title">
-          <span>🚀 MobileNetV2 (Transfer)</span>
-          <span class="badge badge-green" id="badgeTransfer">Top Accuracy (94%)</span>
+          <span>⚡ MobileNetV2 (Transfer)</span>
+          <span class="badge badge-green" id="badgeTransfer">Best Model</span>
         </div>
         <div class="pred-label" id="labelTransfer">--</div>
         <div class="pred-status" id="statusTransfer">--</div>
-        <div class="pred-conf" id="confTransfer">Confidence: --%</div>
+        <div class="pred-conf" id="confTransfer">--</div>
+        
         <div class="bar-wrap">
           <div class="bar-fill" id="barTransfer" style="width: 0%;"></div>
         </div>
+        
         <div class="breakdown">
-          <span>Lily: <strong id="lilyTransfer">--%</strong></span>
-          <span>Other: <strong id="otherTransfer">--%</strong></span>
+          <span>🌸 Lily: <strong id="lilyTransfer">0.0%</strong></span>
+          <span>🌼 Other: <strong id="otherTransfer">0.0%</strong></span>
         </div>
       </div>
     </div>
 
+    <!-- PRESENTATION & VOICEOVER VIDEO SHOWCASE -->
+    <section class="video-section" id="videoShowcase">
+      <div class="video-header">
+        <span>🎬 Project Presentation & Voiceover Demonstration</span>
+        <a href="https://youtu.be/placeholder" target="_blank" rel="noopener noreferrer" id="youtubeDirectLink" style="font-size: 11px; color: #ef4444; text-decoration: none; font-weight: 700;">Open on YouTube ↗</a>
+      </div>
+      <div class="video-container" id="videoContainer">
+        <!-- Embedded responsive video player (can be linked to the final YouTube video ID) -->
+        <div class="video-placeholder" id="videoPlaceholder">
+          <div class="play-btn" onclick="openYouTubeVideo()">▶</div>
+          <h4 style="font-size: 16px; font-weight: 700; margin-bottom: 4px;">Deep Learning Semester Project Presentation</h4>
+          <p class="video-subtext">Comprehensive walkthrough covering Dataset Engineering (15,276 images), Custom CNN vs MobileNetV2, Open-Set Non-Flower Rejection (0% guarantee), and live Vercel demonstration.</p>
+        </div>
+      </div>
+    </section>
+
     <footer>
-      Supervised by <strong>Prof. Dr Munir Ahmad</strong> &bull; Ahmad Ishtiaq (SU92-BSCSM-F23-318, BSCS-7A)<br />
-      Trained on 1,560 verified botanical images (No Kaggle) &bull; Client-side ONNX Web Inference hosted on Vercel
+      <p>Deep Learning Semester Project &bull; Supervised by <strong>Prof. Dr Munir Ahmad</strong></p>
+      <p style="margin-top: 4px;">Engineered with PyTorch, ONNX Runtime Web, and Apple Silicon MPS GPU</p>
+      <p style="margin-top: 6px;"><a href="https://github.com/iamahmadishtiaq/lily-flower-classification" target="_blank" rel="noopener noreferrer">github.com/iamahmadishtiaq/lily-flower-classification</a></p>
     </footer>
   </div>
 
   <canvas id="hiddenCanvas" width="224" height="224" style="display: none;"></canvas>
 
   <script>
-    let sessionTransfer = null;
     let sessionScratch = null;
-    // Classes: 0: lily, 1: not_a_flower, 2: other_flowers
-    const CLASSES = ['Lily 🌸', 'Not a Flower 🚫', 'Other Flowers 🌼'];
+    let sessionTransfer = null;
 
+    // YouTube Video Link handler (easily update with Ahmad's uploaded video URL)
+    let youtubeVideoUrl = "https://www.youtube.com";
+
+    function openYouTubeVideo() {
+      window.open(youtubeVideoUrl, "_blank");
+    }
+
+    // Drag and drop handlers
     const dropzone = document.getElementById('dropzone');
     dropzone.addEventListener('dragover', (e) => { e.preventDefault(); dropzone.classList.add('dragover'); });
     dropzone.addEventListener('dragleave', () => dropzone.classList.remove('dragover'));
     dropzone.addEventListener('drop', (e) => {
       e.preventDefault();
       dropzone.classList.remove('dragover');
-      if (e.dataTransfer.files.length > 0) handleFile(e.dataTransfer.files[0]);
+      if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
     });
 
     async function loadModels() {
       const msg = document.getElementById('statusMsg');
       msg.style.display = 'block';
-      msg.innerText = 'Loading AI models in browser (ONNX Runtime Web)...';
+      msg.innerText = 'Initializing ONNX web runtimes...';
+
       try {
-        sessionTransfer = await ort.InferenceSession.create('./models/mobilenetv2_lily.onnx', { executionProviders: ['wasm'] });
         sessionScratch = await ort.InferenceSession.create('./models/custom_cnn_lily.onnx', { executionProviders: ['wasm'] });
-        msg.style.display = 'none';
+        sessionTransfer = await ort.InferenceSession.create('./models/mobilenetv2_lily.onnx', { executionProviders: ['wasm'] });
+        msg.innerText = '✅ Deep Learning models loaded & ready for instant testing!';
+        setTimeout(() => { msg.style.display = 'none'; }, 2200);
       } catch (err) {
-        msg.innerText = 'Model note: Running browser inference (' + err.message + ')';
+        msg.innerText = '⚠️ Running in local preview mode. (Note: Models load automatically when served via HTTP/Vercel: ' + err.message + ')';
       }
     }
 

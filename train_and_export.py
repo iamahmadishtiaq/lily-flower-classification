@@ -14,7 +14,8 @@ sys.path.insert(0, BASE_DIR)
 
 # Import and run training
 from train_models import run_experiment
-run_experiment()
+if __name__ == '__main__':
+    run_experiment()
 
 # Export to ONNX
 print("\n" + "="*60)
