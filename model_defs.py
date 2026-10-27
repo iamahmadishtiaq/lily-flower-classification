@@ -3,7 +3,7 @@ import torch.nn as nn
 from torchvision import models
 
 class CustomLilyCNN(nn.Module):
-    def __init__(self, num_classes=2):
+    def __init__(self, num_classes=3):
         super(CustomLilyCNN, self).__init__()
         self.features = nn.Sequential(
             nn.Conv2d(3, 32, kernel_size=3, padding=1),
@@ -40,7 +40,7 @@ class CustomLilyCNN(nn.Module):
         x = self.classifier(x)
         return x
 
-def build_transfer_model(num_classes=2):
+def build_transfer_model(num_classes=3):
     model = models.mobilenet_v2(weights=None)
     in_features = model.classifier[1].in_features
     model.classifier = nn.Sequential(

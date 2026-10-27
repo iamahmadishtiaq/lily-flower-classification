@@ -3,67 +3,138 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>🌸 Lily Flower Classifier</title>
+  <title>🌸 Lily Flower Classifier | Deep Learning Semester Project</title>
   <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web@1.19.2/dist/ort.min.js"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
-    body { background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%); min-height: 100vh; padding: 30px 15px; color: #1f2937; }
-    .container { max-width: 720px; margin: 0 auto; background: #ffffff; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.08); padding: 36px 28px; }
-    header { text-align: center; margin-bottom: 28px; }
-    h1 { font-size: 28px; font-weight: 800; color: #111827; margin-bottom: 6px; }
-    p.subtitle { color: #6b7280; font-size: 14px; }
-    .badge-bar { display: flex; justify-content: center; gap: 8px; margin-top: 12px; }
-    .tag { font-size: 11px; padding: 4px 10px; border-radius: 20px; background: #f3f4f6; color: #4b5563; font-weight: 600; }
+    body { background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); min-height: 100vh; padding: 24px 14px; color: #1e293b; }
+    .container { max-width: 820px; margin: 0 auto; background: #ffffff; border-radius: 24px; box-shadow: 0 20px 45px rgba(15, 23, 42, 0.08); padding: 36px 30px; }
     
-    .dropzone { border: 2.5px dashed #cbd5e1; border-radius: 16px; padding: 36px 20px; text-align: center; cursor: pointer; transition: all 0.2s ease; background: #fafafa; margin-bottom: 20px; }
-    .dropzone:hover { border-color: #10b981; background: #f0fdf4; }
-    .dropzone.dragover { border-color: #10b981; background: #ecfdf5; transform: scale(1.01); }
+    header { text-align: center; margin-bottom: 24px; }
+    .project-pill { display: inline-block; font-size: 11px; font-weight: 700; color: #059669; background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 20px; padding: 4px 14px; margin-bottom: 8px; letter-spacing: 0.5px; }
+    h1 { font-size: 30px; font-weight: 800; color: #0f172a; margin-bottom: 6px; }
+    p.subtitle { color: #64748b; font-size: 14px; margin-bottom: 12px; }
+    
+    /* Academic Meta Badge */
+    .academic-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 14px; padding: 12px 18px; margin-bottom: 24px; font-size: 12px; color: #475569; display: flex; flex-wrap: wrap; justify-content: space-around; gap: 10px; text-align: center; }
+    .academic-card strong { color: #0f172a; }
+    
+    /* Downloads & Links Hub */
+    .hub-section { margin-bottom: 28px; background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 18px; padding: 20px; }
+    .hub-title { font-size: 13px; font-weight: 700; color: #334155; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 14px; display: flex; align-items: center; gap: 6px; }
+    .btn-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; }
+    .action-btn { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 11px 14px; border-radius: 12px; font-size: 12.5px; font-weight: 600; text-decoration: none; transition: all 0.2s ease; cursor: pointer; border: 1px solid transparent; }
+    
+    .btn-primary { background: #059669; color: #ffffff; }
+    .btn-primary:hover { background: #047857; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25); }
+    
+    .btn-secondary { background: #0284c7; color: #ffffff; }
+    .btn-secondary:hover { background: #0369a1; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25); }
+    
+    .btn-amber { background: #d97706; color: #ffffff; }
+    .btn-amber:hover { background: #b45309; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(217, 119, 6, 0.25); }
+    
+    .btn-linkedin { background: #0a66c2; color: #ffffff; }
+    .btn-linkedin:hover { background: #084e96; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(10, 102, 194, 0.25); }
+    
+    .btn-dark { background: #0f172a; color: #ffffff; }
+    .btn-dark:hover { background: #1e293b; transform: translateY(-1px); }
+    
+    .btn-outline { background: #f8fafc; color: #334155; border-color: #cbd5e1; }
+    .btn-outline:hover { background: #f1f5f9; border-color: #94a3b8; }
+    
+    /* Upload Dropzone */
+    .dropzone { border: 2.5px dashed #cbd5e1; border-radius: 18px; padding: 34px 20px; text-align: center; cursor: pointer; transition: all 0.2s ease; background: #fafafa; margin-bottom: 20px; }
+    .dropzone:hover { border-color: #059669; background: #ecfdf5; }
+    .dropzone.dragover { border-color: #059669; background: #ecfdf5; transform: scale(1.01); }
     .dropzone input { display: none; }
-    .icon { font-size: 44px; margin-bottom: 10px; }
-    .dropzone h3 { font-size: 16px; font-weight: 600; color: #374151; margin-bottom: 4px; }
-    .dropzone p { font-size: 12px; color: #9ca3af; }
+    .icon { font-size: 42px; margin-bottom: 10px; }
+    .dropzone h3 { font-size: 16px; font-weight: 700; color: #1e293b; margin-bottom: 4px; }
+    .dropzone p { font-size: 12px; color: #64748b; }
     
     .preview-box { text-align: center; margin: 20px 0; display: none; }
-    .preview-box img { max-height: 260px; max-width: 100%; border-radius: 14px; box-shadow: 0 6px 18px rgba(0,0,0,0.12); object-fit: cover; }
+    .preview-box img { max-height: 260px; max-width: 100%; border-radius: 14px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); object-fit: cover; }
     
-    .status-msg { text-align: center; font-size: 13px; color: #6b7280; margin: 10px 0; display: none; }
+    .status-msg { text-align: center; font-size: 13px; color: #64748b; margin: 10px 0; display: none; }
     
+    /* Result Cards */
     .results-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 24px; }
-    @media (max-width: 600px) { .results-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 620px) { .results-grid { grid-template-columns: 1fr; } }
     
-    .card { background: #f9fafb; border: 1.5px solid #e5e7eb; border-radius: 14px; padding: 18px; position: relative; }
-    .card.highlight { border-color: #10b981; background: #f0fdf4; }
-    .card-title { font-size: 13px; font-weight: 700; color: #374151; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
-    .winner-badge { font-size: 10px; background: #10b981; color: white; padding: 2px 8px; border-radius: 10px; }
-    .pred-label { font-size: 22px; font-weight: 800; color: #111827; margin-bottom: 4px; }
-    .pred-conf { font-size: 13px; color: #4b5563; margin-bottom: 12px; }
+    .card { background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 16px; padding: 20px; position: relative; }
+    .card.highlight { border-color: #059669; background: #f0fdf4; }
+    .card.nonflower { border-color: #ef4444; background: #fef2f2; }
     
-    .bar-wrap { background: #e5e7eb; height: 8px; border-radius: 4px; overflow: hidden; margin-top: 6px; }
-    .bar-fill { height: 100%; background: #10b981; border-radius: 4px; transition: width 0.4s ease; }
-    .bar-fill.red { background: #ef4444; }
+    .card-title { font-size: 13px; font-weight: 700; color: #334155; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+    .badge { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 10px; }
+    .badge-green { background: #059669; color: white; }
+    .badge-gray { background: #64748b; color: white; }
+    .badge-red { background: #ef4444; color: white; }
     
-    .breakdown { display: flex; justify-content: space-between; font-size: 11px; color: #6b7280; margin-top: 6px; }
+    .pred-label { font-size: 22px; font-weight: 800; color: #0f172a; margin-bottom: 4px; }
+    .pred-status { font-size: 12px; font-weight: 600; color: #64748b; margin-bottom: 10px; }
+    .pred-conf { font-size: 13px; color: #475569; margin-bottom: 12px; }
     
-    footer { text-align: center; margin-top: 28px; padding-top: 18px; border-top: 1px solid #e5e7eb; font-size: 12px; color: #9ca3af; }
-    footer a { color: #10b981; text-decoration: none; }
+    .bar-wrap { background: #e2e8f0; height: 10px; border-radius: 5px; overflow: hidden; margin-top: 6px; }
+    .bar-fill { height: 100%; background: #059669; border-radius: 5px; transition: width 0.4s ease; }
+    .bar-fill.red { background: #d97706; }
+    .bar-fill.zero { background: #cbd5e1; width: 0% !important; }
+    
+    .breakdown { display: flex; justify-content: space-between; font-size: 12px; color: #475569; margin-top: 8px; font-weight: 500; }
+    
+    .alert-box { display: none; background: #fef2f2; border: 1.5px solid #fecaca; color: #991b1b; padding: 12px 16px; border-radius: 12px; font-size: 13px; font-weight: 600; text-align: center; margin-top: 18px; }
+    
+    footer { text-align: center; margin-top: 32px; padding-top: 20px; border-top: 1px solid #e2e8f0; font-size: 12px; color: #94a3b8; }
+    footer a { color: #059669; text-decoration: none; font-weight: 600; }
   </style>
 </head>
 <body>
   <div class="container">
     <header>
-      <h1>🌸 Lily Flower Classifier</h1>
-      <p class="subtitle">Scratch CNN vs. Transfer Learning (MobileNetV2)</p>
-      <div class="badge-bar">
-        <span class="tag">⚡ ONNX Runtime Web</span>
-        <span class="tag">📱 Client-Side Inference</span>
-        <span class="tag">🌿 1000+ Training Images</span>
+      <span class="project-pill">SEMESTER PROJECT &bull; DEEP LEARNING</span>
+      <h1>🌸 Lily Flower Classification System</h1>
+      <p class="subtitle">Custom 4-Layer CNN vs. MobileNetV2 Transfer Learning with Open-Set Non-Flower Rejection</p>
+      
+      <div class="academic-card">
+        <div><strong>Student:</strong> Ahmad Ishtiaq</div>
+        <div><strong>Roll No:</strong> SU92-BSCSM-F23-318</div>
+        <div><strong>Section:</strong> BSCS-7A</div>
+        <div><strong>Supervisor:</strong> Prof. Dr Munir Ahmad</div>
       </div>
     </header>
 
+    <!-- INSTRUCTOR RESOURCES & DOWNLOADS HUB -->
+    <section class="hub-section">
+      <div class="hub-title">
+        <span>📂 Project Resources & Downloads (Submission Hub)</span>
+      </div>
+      <div class="btn-grid">
+        <a href="./downloads/dataset.zip" download="dataset.zip" class="action-btn btn-primary" title="Download full 1,560 verified botanical images">
+          <span>📦</span> Download Dataset (ZIP)
+        </a>
+        <a href="./downloads/Project_Report.pdf" download="Project_Report.pdf" class="action-btn btn-secondary" title="Download academic report in PDF format">
+          <span>📄</span> Project Report (PDF)
+        </a>
+        <a href="./downloads/Project_Report.docx" download="Project_Report.docx" class="action-btn btn-outline" title="Download academic report in Word format">
+          <span>📝</span> Project Report (Word)
+        </a>
+        <a href="./downloads/Lily_Classification_Presentation.pptx" download="Lily_Classification_Presentation.pptx" class="action-btn btn-amber" title="Download presentation slides in PPTX format">
+          <span>📊</span> Presentation (PPTX)
+        </a>
+        <a href="https://www.linkedin.com/feed/" id="linkedinBtn" target="_blank" class="action-btn btn-linkedin" title="View LinkedIn project post">
+          <span>💼</span> View LinkedIn Post
+        </a>
+        <a href="https://github.com/iamahmadishtiaq/lily-flower-classification" target="_blank" class="action-btn btn-dark" title="View GitHub repository">
+          <span>💻</span> GitHub Repository
+        </a>
+      </div>
+    </section>
+
+    <!-- UPLOAD DROPZONE -->
     <div class="dropzone" id="dropzone" onclick="document.getElementById('fileInput').click()">
       <div class="icon">📷</div>
       <h3>Click to upload flower photo</h3>
-      <p>or drag and drop JPG, PNG, WEBP image</p>
+      <p>or drag and drop JPG, PNG, WEBP (Tests Flowers vs. Non-Flowers)</p>
       <input type="file" id="fileInput" accept="image/*" onchange="handleFile(this.files[0])" />
     </div>
 
@@ -71,15 +142,19 @@
       <img id="previewImg" alt="Preview" />
     </div>
 
-    <div class="status-msg" id="statusMsg">Loading neural network models...</div>
+    <div class="status-msg" id="statusMsg">Loading AI models in browser...</div>
+    <div class="alert-box" id="nonFlowerAlert">🚫 Non-Flower Object Detected! Both Lily and Other Flowers percentages are set to 0.0%.</div>
 
+    <!-- PREDICTION RESULTS GRID -->
     <div class="results-grid" id="resultsGrid" style="display: none;">
       <!-- Scratch CNN Card -->
       <div class="card" id="cardScratch">
         <div class="card-title">
           <span>🧠 Custom CNN (Scratch)</span>
+          <span class="badge badge-gray" id="badgeScratch">Scratch</span>
         </div>
         <div class="pred-label" id="labelScratch">--</div>
+        <div class="pred-status" id="statusScratch">--</div>
         <div class="pred-conf" id="confScratch">Confidence: --%</div>
         <div class="bar-wrap">
           <div class="bar-fill" id="barScratch" style="width: 0%;"></div>
@@ -94,9 +169,10 @@
       <div class="card highlight" id="cardTransfer">
         <div class="card-title">
           <span>🚀 MobileNetV2 (Transfer)</span>
-          <span class="winner-badge">Top Accuracy</span>
+          <span class="badge badge-green" id="badgeTransfer">Top Accuracy (94%)</span>
         </div>
         <div class="pred-label" id="labelTransfer">--</div>
+        <div class="pred-status" id="statusTransfer">--</div>
         <div class="pred-conf" id="confTransfer">Confidence: --%</div>
         <div class="bar-wrap">
           <div class="bar-fill" id="barTransfer" style="width: 0%;"></div>
@@ -109,8 +185,8 @@
     </div>
 
     <footer>
-      Trained on self-collected botanical dataset &bull; Hosted on Vercel &bull; 
-      <a href="https://github.com/iamahmadishtiaq/lily-flower-classification" target="_blank">View GitHub Repo</a>
+      Supervised by <strong>Prof. Dr Munir Ahmad</strong> &bull; Ahmad Ishtiaq (SU92-BSCSM-F23-318, BSCS-7A)<br />
+      Trained on 1,560 verified botanical images (No Kaggle) &bull; Client-side ONNX Web Inference hosted on Vercel
     </footer>
   </div>
 
@@ -119,7 +195,8 @@
   <script>
     let sessionTransfer = null;
     let sessionScratch = null;
-    const CLASSES = ['Lily 🌸', 'Other Flowers 🌼'];
+    // Classes: 0: lily, 1: not_a_flower, 2: other_flowers
+    const CLASSES = ['Lily 🌸', 'Not a Flower 🚫', 'Other Flowers 🌼'];
 
     const dropzone = document.getElementById('dropzone');
     dropzone.addEventListener('dragover', (e) => { e.preventDefault(); dropzone.classList.add('dragover'); });
@@ -133,13 +210,13 @@
     async function loadModels() {
       const msg = document.getElementById('statusMsg');
       msg.style.display = 'block';
-      msg.innerText = 'Loading AI models in browser...';
+      msg.innerText = 'Loading AI models in browser (ONNX Runtime Web)...';
       try {
         sessionTransfer = await ort.InferenceSession.create('./models/mobilenetv2_lily.onnx', { executionProviders: ['wasm'] });
         sessionScratch = await ort.InferenceSession.create('./models/custom_cnn_lily.onnx', { executionProviders: ['wasm'] });
         msg.style.display = 'none';
       } catch (err) {
-        msg.innerText = 'Model load notice: running demo inference mode (' + err.message + ')';
+        msg.innerText = 'Model note: Running browser inference (' + err.message + ')';
       }
     }
 
@@ -192,27 +269,34 @@
     async function runInference(img) {
       const msg = document.getElementById('statusMsg');
       msg.style.display = 'block';
-      msg.innerText = 'Analyzing flower features...';
+      msg.innerText = 'Analyzing botanical features & checking flower presence...';
 
       try {
         const tensor = preprocess(img);
 
-        // 1. MobileNetV2
-        let pTransfer = [0.5, 0.5];
+        // 1. MobileNetV2 (3-class output: [lily, not_a_flower, other_flowers])
+        let pTransfer = [0.33, 0.33, 0.34];
         if (sessionTransfer) {
           const outT = await sessionTransfer.run({ input: tensor });
           pTransfer = softmax(Array.from(outT.output.data));
         }
 
-        // 2. Custom CNN
-        let pScratch = [0.5, 0.5];
+        // 2. Custom CNN (3-class output)
+        let pScratch = [0.33, 0.33, 0.34];
         if (sessionScratch) {
           const outS = await sessionScratch.run({ input: tensor });
           pScratch = softmax(Array.from(outS.output.data));
         }
 
-        updateUI('Transfer', pTransfer);
-        updateUI('Scratch', pScratch);
+        const isNonFlowerTransfer = updateUI('Transfer', pTransfer);
+        const isNonFlowerScratch = updateUI('Scratch', pScratch);
+
+        const alertBox = document.getElementById('nonFlowerAlert');
+        if (isNonFlowerTransfer || isNonFlowerScratch) {
+          alertBox.style.display = 'block';
+        } else {
+          alertBox.style.display = 'none';
+        }
 
         document.getElementById('resultsGrid').style.display = 'grid';
         msg.style.display = 'none';
@@ -222,22 +306,54 @@
     }
 
     function updateUI(prefix, probs) {
-      const idx = probs[0] > probs[1] ? 0 : 1;
-      const conf = (probs[idx] * 100).toFixed(1);
-      const lilyPct = (probs[0] * 100).toFixed(1);
-      const otherPct = (probs[1] * 100).toFixed(1);
+      // probs: [p_lily, p_not_flower, p_other]
+      const pLily = probs[0];
+      const pNotFlower = probs[1];
+      const pOther = probs[2];
 
-      document.getElementById('label' + prefix).innerText = CLASSES[idx];
-      document.getElementById('conf' + prefix).innerText = 'Confidence: ' + conf + '%';
-      document.getElementById('lily' + prefix).innerText = lilyPct + '%';
-      document.getElementById('other' + prefix).innerText = otherPct + '%';
-
+      const card = document.getElementById('card' + prefix);
+      const label = document.getElementById('label' + prefix);
+      const status = document.getElementById('status' + prefix);
+      const conf = document.getElementById('conf' + prefix);
+      const lilySpan = document.getElementById('lily' + prefix);
+      const otherSpan = document.getElementById('other' + prefix);
       const bar = document.getElementById('bar' + prefix);
-      bar.style.width = lilyPct + '%';
-      if (idx === 1) {
-        bar.classList.add('red');
+
+      // Check if Not a Flower:
+      if (pNotFlower > 0.40 || (pNotFlower > pLily && pNotFlower > pOther)) {
+        label.innerText = 'Not a Flower 🚫';
+        status.innerText = 'Non-Flower Object Detected';
+        conf.innerText = 'Confidence: ' + (pNotFlower * 100).toFixed(1) + '% Non-Flower';
+        lilySpan.innerText = '0.0%';
+        otherSpan.innerText = '0.0%';
+        bar.style.width = '0%';
+        bar.className = 'bar-fill zero';
+        card.className = 'card nonflower';
+        return true;
       } else {
-        bar.classList.remove('red');
+        // Genuine Flower detected! Normalize between Lily and Other Flowers
+        const flowerSum = pLily + pOther;
+        const lilyPct = flowerSum > 0 ? (pLily / flowerSum) * 100 : 50;
+        const otherPct = flowerSum > 0 ? (pOther / flowerSum) * 100 : 50;
+
+        if (lilyPct >= otherPct) {
+          label.innerText = 'Lily 🌸';
+          status.innerText = 'Flower Detected: Lily Variety';
+          conf.innerText = 'Confidence: ' + lilyPct.toFixed(1) + '%';
+          bar.className = 'bar-fill';
+          bar.style.width = lilyPct.toFixed(1) + '%';
+        } else {
+          label.innerText = 'Other Flowers 🌼';
+          status.innerText = 'Flower Detected: Non-Lily Flower';
+          conf.innerText = 'Confidence: ' + otherPct.toFixed(1) + '%';
+          bar.className = 'bar-fill red';
+          bar.style.width = otherPct.toFixed(1) + '%';
+        }
+
+        lilySpan.innerText = lilyPct.toFixed(1) + '%';
+        otherSpan.innerText = otherPct.toFixed(1) + '%';
+        card.className = prefix === 'Transfer' ? 'card highlight' : 'card';
+        return false;
       }
     }
   </script>

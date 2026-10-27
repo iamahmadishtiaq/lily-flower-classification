@@ -33,7 +33,7 @@ os.makedirs(WEB_MODELS_DIR, exist_ok=True)
 print("\n📦 Exporting Custom CNN to ONNX...")
 
 class CustomLilyCNN(nn.Module):
-    def __init__(self, num_classes=2):
+    def __init__(self, num_classes=3):
         super(CustomLilyCNN, self).__init__()
         self.features = nn.Sequential(
             nn.Conv2d(3, 32, kernel_size=3, padding=1),
@@ -67,7 +67,7 @@ class CustomLilyCNN(nn.Module):
         x = self.classifier(x)
         return x
 
-cnn_model = CustomLilyCNN(num_classes=2)
+cnn_model = CustomLilyCNN(num_classes=3)
 cnn_model.load_state_dict(torch.load(os.path.join(MODELS_DIR, "custom_cnn_lily.pth"), map_location="cpu"))
 cnn_model.eval()
 
@@ -84,7 +84,7 @@ print(f"  ✅ Custom CNN ONNX saved: {cnn_onnx_path} ({os.path.getsize(cnn_onnx_
 # ─── Export MobileNetV2 ───
 print("\n📦 Exporting MobileNetV2 to ONNX...")
 
-def build_transfer_model(num_classes=2):
+def build_transfer_model(num_classes=3):
     model = models.mobilenet_v2(weights=None)
     in_features = model.classifier[1].in_features
     model.classifier = nn.Sequential(
@@ -96,7 +96,7 @@ def build_transfer_model(num_classes=2):
     )
     return model
 
-transfer_model = build_transfer_model(num_classes=2)
+transfer_model = build_transfer_model(num_classes=3)
 transfer_model.load_state_dict(torch.load(os.path.join(MODELS_DIR, "transfer_mobilenet_lily.pth"), map_location="cpu"))
 transfer_model.eval()
 

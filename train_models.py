@@ -18,7 +18,7 @@ os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 # 1. Custom CNN Architecture (Trained from scratch)
 class CustomLilyCNN(nn.Module):
-    def __init__(self, num_classes=2):
+    def __init__(self, num_classes=3):
         super(CustomLilyCNN, self).__init__()
         self.features = nn.Sequential(
             # Conv block 1
@@ -60,7 +60,7 @@ class CustomLilyCNN(nn.Module):
         return x
 
 # 2. Transfer Learning Model (MobileNetV2)
-def build_transfer_model(num_classes=2):
+def build_transfer_model(num_classes=3):
     model = models.mobilenet_v2(weights=models.MobileNet_V2_Weights.DEFAULT)
     # Freeze base feature extractor layers
     for param in model.features.parameters():
