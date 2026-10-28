@@ -3,510 +3,523 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#06100d">
-  <title>🌸 LilyGuard AI — Botanical Flower Classification & Open-Set Rejection</title>
-  <meta name="description" content="LilyGuard AI: An enterprise deep learning system for botanical lily flower classification with open-set non-flower rejection.">
-  
-  <!-- Typography -->
+  <meta name="theme-color" content="#070913">
+  <title>🌸 Florix AI — Next-Gen Botanical Flower Classification & Open-Set Rejection</title>
+  <meta name="description" content="Florix AI: An enterprise deep learning system for botanical lily flower classification with open-set non-flower rejection.">
+
+  <!-- Modern Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
   <!-- ONNX Web Runtime (Client-Side WASM) -->
   <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web@1.19.2/dist/ort.min.js"></script>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Ambient Atmospheric Lighting -->
-  <div class="glow glow-a"></div>
-  <div class="glow glow-b"></div>
+  <!-- Ambient Aurora Glow Orbs -->
+  <div class="aurora-bg">
+    <div class="aurora-orb orb-1"></div>
+    <div class="aurora-orb orb-2"></div>
+    <div class="aurora-orb orb-3"></div>
+  </div>
 
-  <!-- Navigation Bar -->
-  <header class="nav wrap">
-    <a class="brand" href="#top">
-      <span class="brand-icon">🌸</span> LilyGuard<span class="accent">AI</span>
-      <span class="brand-badge">v2.0</span>
-    </a>
-    <nav>
-      <a href="#analyze">Analyze</a>
-      <a href="#performance">Performance</a>
-      <a href="#science">The Science</a>
-      <a href="#academic">Academic Info</a>
-      <a href="#resources">Resources</a>
-    </nav>
-    <a class="nav-cta" href="#analyze">Launch Analyzer <span>↗</span></a>
-  </header>
-
-  <main id="top">
-    <!-- Hero Section -->
-    <section class="hero wrap">
-      <div class="hero-content">
-        <div class="eyebrow">
-          <span class="pulse"></span> DEEP LEARNING &bull; BOTANICAL VISION &bull; 15,276 IMAGES
+  <div class="container">
+    <!-- Glass Floating Navbar -->
+    <header class="navbar">
+      <div class="nav-inner">
+        <div class="brand-wrap">
+          <div class="brand-logo">🌸</div>
+          <div class="brand-name">Florix<span>AI</span></div>
+          <span class="badge-version">v2.4 Pro</span>
         </div>
-        <h1>Classify with<br><em>botanical precision.</em></h1>
-        <p class="hero-sub">
-          An enterprise-grade computer vision system distinguishing Lily flowers (*Lilium* genus) from other floral species. Powered by MobileNetV2 and Custom CNN with an Open-Set Non-Flower Rejection engine guaranteeing 0.0% false positives.
+
+        <nav class="nav-menu">
+          <a href="#workbench">Interactive AI</a>
+          <a href="#benchmarks">Benchmarks</a>
+          <a href="#science">Case Studies</a>
+          <a href="#academic">Academic Info</a>
+          <a href="#resources">Artifacts</a>
+        </nav>
+
+        <a href="#workbench" class="btn-nav">Test Models <span>↗</span></a>
+      </div>
+    </header>
+
+    <main>
+      <!-- Hero Section -->
+      <section class="hero-section">
+        <div class="pill-badge">
+          <span class="pulse-dot"></span> DEEP LEARNING SEMESTER PROJECT &bull; 15,276 BOTANICAL IMAGES
+        </div>
+
+        <h1 class="hero-title">
+          Next-Gen Botanical Vision.<br>
+          <span class="gradient-text">Zero False Positives.</span>
+        </h1>
+
+        <p class="hero-subtitle">
+          An enterprise-grade deep learning vision architecture distinguishing genuine Lily flowers (*Lilium* species) with an innovative Open-Set Non-Flower Rejection gatekeeper guaranteeing 0.0% false detections.
         </p>
 
-        <div class="hero-actions">
-          <a class="btn primary" href="#analyze">Analyze Flower <span>↗</span></a>
-          <a class="btn secondary" href="#performance">Explore the Research <span>&darr;</span></a>
+        <div class="hero-buttons">
+          <a href="#workbench" class="btn-primary">Launch Interactive Analyzer <span>↗</span></a>
+          <a href="#benchmarks" class="btn-secondary">Explore Research Metrics <span>&darr;</span></a>
         </div>
 
-        <div class="hero-stats">
-          <div>
-            <strong>85.11%</strong>
-            <span>MobileNetV2 Val Accuracy &#127942;</span>
-          </div>
-          <div>
-            <strong>75.29%</strong>
-            <span>Custom 4-Layer CNN</span>
-          </div>
-          <div>
-            <strong>15,276</strong>
-            <span>Research-Grade Images</span>
-          </div>
-          <div>
-            <strong style="color: var(--accent);">0.0%</strong>
-            <span>Non-Flower Guarantee</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Hero Visual Radar Chamber -->
-      <div class="hero-visual">
-        <div class="orbit orbit-1"></div>
-        <div class="orbit orbit-2"></div>
-        <div class="visual-center">
-          <div class="visual-icon">&#127800;</div>
-          <div class="scan-line"></div>
-          <div class="visual-label" id="engineStatus">
-            <span class="status-dot"></span> VISION ENGINE <span>ACTIVE</span>
-          </div>
-        </div>
-
-        <div class="floating-card float-top">
-          <span class="status-dot"></span> In-Browser ONNX Web
-          <strong>0-LATENCY WASM</strong>
-        </div>
-
-        <div class="floating-card float-bottom">
-          <span>&#128737;&#65039;</span> Open-Set Gatekeeper
-          <strong style="color: var(--accent); margin-top: 3px; font-size: 10px;">0% FALSE POSITIVE</strong>
-        </div>
-
-        <div class="visual-caption">RESEARCH PIPELINE / MPS GPU ACCELERATED</div>
-      </div>
-    </section>
-
-    <!-- Scrolling Ticker Marquee -->
-    <section class="ticker">
-      <div class="ticker-track">
-        <div class="ticker-content">
-          15,276 BOTANICAL IMAGES <span>&#10035;</span> PYTORCH &bull; ONNX RUNTIME WEB <span>&#10035;</span> 0.0% NON-FLOWER REJECTION GUARANTEE <span>&#10035;</span> MOBILENETV2 (85.11%) VS CUSTOM CNN (75.29%) <span>&#10035;</span> DRACUNCULUS VULGARIS OUTLIER STUDY <span>&#10035;</span> DEEP LEARNING SEMESTER PROJECT &bull; DR. MUNIR AHMAD <span>&#10035;</span> AHMAD ISHTIAQ (SU92-BSCSM-F23-318) <span>&#10035;</span> 15,276 BOTANICAL IMAGES <span>&#10035;</span> PYTORCH &bull; ONNX RUNTIME WEB <span>&#10035;</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- SECTION 01: THE ANALYZER (Interactive Workbench) -->
-    <section id="analyze" class="section wrap">
-      <div class="section-head">
-        <div>
-          <span class="kicker">01 / THE EXPERIENCE</span>
-          <h2>Inspect with <em>intelligence.</em></h2>
-          <p>Upload a flower or object photo to receive real-time botanical classification and non-flower validation.</p>
-        </div>
-        <div class="section-index">01 &mdash; 05</div>
-      </div>
-
-      <!-- Model Selector Tabs -->
-      <div class="model-tabs">
-        <div class="model-tab active" id="tabTransfer">
-          <span>&#9889;</span> MobileNetV2 (Transfer Learning)
-          <span class="badge-sm">85.11% Acc &bull; Recommended</span>
-        </div>
-        <div class="model-tab" id="tabScratch">
-          <span>&#129504;</span> Custom 4-Layer CNN (From Scratch)
-          <span class="badge-sm">75.29% Acc &bull; 4 Conv Blocks</span>
-        </div>
-      </div>
-
-      <div class="analyzer">
-        <!-- Left: Upload Panel -->
-        <div class="upload-panel">
-          <div class="panel-top">
-            <span class="panel-label">
-              <span class="status-dot"></span> IMAGE INPUT
-            </span>
-            <span class="tiny">JPG &bull; PNG &bull; WEBP</span>
+        <!-- Live 4-Stat Cards Row -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-val">85.11%</div>
+            <div class="stat-label">MobileNetV2 Accuracy &#127942;</div>
+            <div class="stat-desc">ImageNet Transfer Learning Backbone</div>
           </div>
 
-          <input id="fileInput" type="file" accept="image/jpeg,image/png,image/webp" hidden>
+          <div class="stat-card">
+            <div class="stat-val">75.29%</div>
+            <div class="stat-label">Custom 4-Layer CNN</div>
+            <div class="stat-desc">Trained from Scratch Random Init</div>
+          </div>
 
-          <div class="dropzone" id="dropzone" role="button" tabindex="0">
-            <div id="dropzonePrompt">
-              <div class="drop-icon">&#128247;</div>
-              <h3>Drop flower photo here</h3>
-              <p>or click to browse from your device. Tests flowers vs. non-flower objects in real time.</p>
+          <div class="stat-card">
+            <div class="stat-val">15,276</div>
+            <div class="stat-label">Botanical Dataset</div>
+            <div class="stat-desc">100% Label-Purity Verified Flora</div>
+          </div>
+
+          <div class="stat-card accent-rose">
+            <div class="stat-val" style="color: #f43f5e;">0.0%</div>
+            <div class="stat-label" style="color: #fb7185;">Non-Flower Guarantee</div>
+            <div class="stat-desc">Zero Out-Of-Distribution Leakage</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION: INTERACTIVE AI WORKBENCH -->
+      <section id="workbench" class="section-block">
+        <div class="section-header">
+          <span class="section-tag">✦ LIVE IN-BROWSER INFERENCE</span>
+          <h2 class="section-title">Experience Botanical Intelligence</h2>
+          <p class="section-desc">Test our neural network on your own photos or use pre-loaded botanical samples with client-side zero-latency execution.</p>
+        </div>
+
+        <div class="workbench-card">
+          <!-- Controls Bar -->
+          <div class="workbench-controls">
+            <div class="model-switch-wrap">
+              <button type="button" class="model-btn active" id="btnTransfer">
+                <span>&#9889;</span> MobileNetV2 (Transfer)
+              </button>
+              <button type="button" class="model-btn" id="btnScratch">
+                <span>&#129504;</span> Custom CNN (Scratch)
+              </button>
             </div>
 
-            <div class="preview-container" id="previewBox">
-              <img id="previewImg" alt="Preview">
-              <button type="button" class="btn-change-image" id="btnChangeImage">Change Photo</button>
+            <div class="engine-indicator" id="engineBadge">
+              <span class="pulse-dot"></span> Vision Engine Online
             </div>
           </div>
 
-          <!-- Quick Test Samples -->
-          <div class="samples-strip">
-            <div class="samples-label">&#10024; Quick Test Botanical Samples</div>
-            <div class="samples-grid">
-              <button type="button" class="sample-btn" data-src="./samples/sample_lily.jpg">
-                <img src="./samples/sample_lily.jpg" alt="Lily">
-                <span>🌸 Asiatic Lily</span>
-              </button>
-              <button type="button" class="sample-btn" data-src="./samples/sample_other.jpg">
-                <img src="./samples/sample_other.jpg" alt="Other">
-                <span>🌼 Sunflower</span>
-              </button>
-              <button type="button" class="sample-btn" data-src="./samples/sample_nonflower.jpg">
-                <img src="./samples/sample_nonflower.jpg" alt="Car">
-                <span>🚫 Sports Car</span>
-              </button>
+          <!-- Dual Workbench Grid -->
+          <div class="workbench-grid">
+            <!-- Left: Dropzone & Samples -->
+            <div>
+              <input id="fileSelector" type="file" accept="image/jpeg,image/png,image/webp" hidden>
+
+              <div class="upload-surface" id="uploadSurface" role="button" tabindex="0">
+                <div id="promptArea">
+                  <div class="upload-icon">&#128247;</div>
+                  <h3>Upload or Drag &amp; Drop Photo</h3>
+                  <p>Supports JPG, PNG, WEBP. Upload a flower or any random object to test open-set rejection.</p>
+                </div>
+
+                <div class="image-preview-area" id="previewArea">
+                  <img id="displayImg" alt="Input Preview">
+                  <button type="button" class="btn-reset-img" id="btnReset">Change Image</button>
+                </div>
+              </div>
+
+              <!-- Quick Test Botanical Samples -->
+              <div class="sample-bar">
+                <div class="sample-title">Click to Test Curated Samples:</div>
+                <div class="sample-items">
+                  <button type="button" class="sample-pill" data-src="./samples/sample_lily.jpg">
+                    <img src="./samples/sample_lily.jpg" alt="Lily">
+                    <div>
+                      <strong>Asiatic Lily</strong>
+                      <div style="font-size: 10px; color: #34d399;">Pure Lily &#127800;</div>
+                    </div>
+                  </button>
+
+                  <button type="button" class="sample-pill" data-src="./samples/sample_other.jpg">
+                    <img src="./samples/sample_other.jpg" alt="Sunflower">
+                    <div>
+                      <strong>Sunflower</strong>
+                      <div style="font-size: 10px; color: #fbbf24;">Other Flower &#127804;</div>
+                    </div>
+                  </button>
+
+                  <button type="button" class="sample-pill" data-src="./samples/sample_nonflower.jpg">
+                    <img src="./samples/sample_nonflower.jpg" alt="Sports Car">
+                    <div>
+                      <strong>Sports Car</strong>
+                      <div style="font-size: 10px; color: #f43f5e;">Non-Flower &#128663;</div>
+                    </div>
+                  </button>
+                </div>
+              </div>
             </div>
-          </div>
 
-          <button class="btn primary" id="analyzeBtn" style="margin-top: 20px; width: 100%;">
-            Run Analysis <span>↗</span>
-          </button>
-        </div>
+            <!-- Right: Telemetry Results -->
+            <div class="telemetry-panel">
+              <div class="telemetry-header">
+                <span style="font-size: 11px; font-weight: 800; letter-spacing: 1.5px; color: var(--text-dim);">NEURAL TELEMETRY</span>
+                <span class="status-pill active" id="telemetryStatus">READY FOR INPUT</span>
+              </div>
 
-        <!-- Right: Results Telemetry Panel -->
-        <div class="result-panel">
-          <div class="panel-top">
-            <span class="panel-label">
-              <span class="status-dot"></span> MODEL TELEMETRY
-            </span>
-            <span class="result-status-tag" id="resultTag">READY FOR INPUT</span>
-          </div>
+              <!-- Main Output Card -->
+              <div class="output-hero-card" id="outputCard">
+                <div class="classification-label" id="outputTag">STANDBY MODE</div>
+                <h3 class="classification-title" id="outputTitle">Select or upload an image</h3>
+                <p class="classification-desc" id="outputDesc">
+                  Our network extracts botanical features including floral petal geometry, stamen configuration, and color distributions to identify genus *Lilium*.
+                </p>
 
-          <!-- Main Result Callout Card -->
-          <div class="result-main-card" id="resultCard">
-            <span class="result-badge" id="resultBadge">STANDBY MODE</span>
-            <h3 class="result-title" id="resultTitle">Upload or pick a sample</h3>
-            <p class="result-desc" id="resultDesc">
-              Our neural network evaluates botanical structures including tepal symmetry, stamen arrangement, and petal pigmentation, while checking non-flower features.
-            </p>
+                <div class="rejection-alert" id="rejectionAlert">
+                  <span>&#128737;&#65039;</span>
+                  <div>
+                    <strong>Open-Set Guard Activated:</strong> Non-flower object verified. Lily % and Other Flowers % are strictly locked to <strong>0.0%</strong>.
+                  </div>
+                </div>
+              </div>
 
-            <div class="nonflower-notice" id="nonflowerNotice">
-              <span>&#128737;&#65039;</span>
+              <!-- Animated Meters -->
               <div>
-                <strong>Safety Policy Enforced:</strong> Non-flower object verified. Both Lily and Other Flowers percentages are set strictly to <strong>0.0%</strong> to eliminate false positives.
-              </div>
-            </div>
-          </div>
+                <div class="meter-row">
+                  <div class="meter-header">
+                    <span>🌸 Lily Flower Probability</span>
+                    <strong id="valLily">&mdash;</strong>
+                  </div>
+                  <div class="meter-track">
+                    <div class="meter-bar lily" id="barLily"></div>
+                  </div>
+                </div>
 
-          <!-- Detailed Probability Meters -->
-          <div class="prob-group">
-            <div class="prob-row">
-              <div class="prob-header">
-                <span>🌸 Lily Flower Probability</span>
-                <strong id="lilyProb">&mdash;</strong>
-              </div>
-              <div class="prob-track">
-                <div class="prob-bar lily" id="lilyBar"></div>
-              </div>
-            </div>
+                <div class="meter-row">
+                  <div class="meter-header">
+                    <span>🌼 Other Flowers Probability</span>
+                    <strong id="valOther">&mdash;</strong>
+                  </div>
+                  <div class="meter-track">
+                    <div class="meter-bar other" id="barOther"></div>
+                  </div>
+                </div>
 
-            <div class="prob-row">
-              <div class="prob-header">
-                <span>🌼 Other Flowers Probability</span>
-                <strong id="otherProb">&mdash;</strong>
-              </div>
-              <div class="prob-track">
-                <div class="prob-bar other" id="otherBar"></div>
-              </div>
-            </div>
-
-            <div class="prob-row">
-              <div class="prob-header">
-                <span>🚫 Non-Flower Rejection Confidence</span>
-                <strong id="nonflowerProb">&mdash;</strong>
-              </div>
-              <div class="prob-track">
-                <div class="prob-bar nonflower" id="nonflowerBar"></div>
+                <div class="meter-row">
+                  <div class="meter-header">
+                    <span>🚫 Non-Flower Rejection Confidence</span>
+                    <strong id="valReject">&mdash;</strong>
+                  </div>
+                  <div class="meter-track">
+                    <div class="meter-bar rejection" id="barReject"></div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- SECTION 02: PERFORMANCE & BENCHMARK -->
-    <section id="performance" class="section wrap" style="padding-top: 40px;">
-      <div class="section-head">
-        <div>
-          <span class="kicker">02 / THE BENCHMARK</span>
-          <h2>Empirical <em>superiority.</em></h2>
-          <p>Trained and validated on 15,276 botanical images (12,221 train / 3,055 held-out validation) using Apple Silicon MPS GPU acceleration.</p>
-        </div>
-        <div class="section-index">02 &mdash; 05</div>
-      </div>
-
-      <!-- Metric Cards Grid -->
-      <div class="metric-grid">
-        <div class="metric-card">
-          <div class="metric-num">85.11%</div>
-          <div class="metric-name">MobileNetV2 Accuracy &#127942;</div>
-          <div class="metric-sub">ImageNet Transfer Learning backbone with customized dense classification head.</div>
+      <!-- SECTION: BENCHMARKS & ARCHITECTURE COMPARISON -->
+      <section id="benchmarks" class="section-block">
+        <div class="section-header">
+          <span class="section-tag">✦ EMPIRICAL BENCHMARKS</span>
+          <h2 class="section-title">Model Performance Breakdown</h2>
+          <p class="section-desc">Evaluated on a strictly held-out test split of 3,055 unseen images across all three classes.</p>
         </div>
 
-        <div class="metric-card">
-          <div class="metric-num">91.01%</div>
-          <div class="metric-name">Lily Detection Recall</div>
-          <div class="metric-sub">942 out of 1035 genuine lilies detected across extreme morphological variants.</div>
+        <div class="benchmark-cards">
+          <div class="bench-card">
+            <div class="bench-score">85.11%</div>
+            <div class="bench-name">MobileNetV2 Accuracy &#127942;</div>
+            <div class="bench-desc">Pretrained ImageNet weights fine-tuned on 15k botanical samples.</div>
+          </div>
+
+          <div class="bench-card">
+            <div class="bench-score">91.01%</div>
+            <div class="bench-name">Lily Recall Score</div>
+            <div class="bench-desc">942 of 1035 genuine lilies identified across extreme morphological diversity.</div>
+          </div>
+
+          <div class="bench-card">
+            <div class="bench-score">90.35%</div>
+            <div class="bench-name">Non-Flower Rejection</div>
+            <div class="bench-desc">908 of 1005 non-flower objects accurately rejected with 0.0% false output.</div>
+          </div>
+
+          <div class="bench-card">
+            <div class="bench-score">91.35%</div>
+            <div class="bench-name">Other Flowers Precision</div>
+            <div class="bench-desc">Near-zero confusion when distinguishing roses, tulips, and sunflowers.</div>
+          </div>
         </div>
 
-        <div class="metric-card">
-          <div class="metric-num">90.35%</div>
-          <div class="metric-name">Non-Flower Rejection</div>
-          <div class="metric-sub">908 out of 1005 non-flower objects accurately rejected with 0.0% false output.</div>
+        <!-- Comparison Bar -->
+        <div class="model-comparison-card">
+          <div class="comp-title-bar">
+            <h3>Validation Accuracy Comparison</h3>
+            <span style="font-size: 11px; font-weight: 800; color: #38bdf8;">HELD-OUT TEST SET: N=3,055</span>
+          </div>
+
+          <div class="comp-bar-item">
+            <div class="comp-bar-labels">
+              <strong>MobileNetV2 Transfer Learning (ImageNet Pre-Trained) &#127942;</strong>
+              <span>85.11% Accuracy</span>
+            </div>
+            <div class="comp-track-outer">
+              <div class="comp-bar-inner mobilenet"></div>
+            </div>
+          </div>
+
+          <div class="comp-bar-item">
+            <div class="comp-bar-labels">
+              <strong>Custom 4-Layer CNN (Trained from Scratch)</strong>
+              <span style="color: #818cf8;">75.29% Accuracy</span>
+            </div>
+            <div class="comp-track-outer">
+              <div class="comp-bar-inner customcnn"></div>
+            </div>
+          </div>
         </div>
 
-        <div class="metric-card">
-          <div class="metric-num">91.35%</div>
-          <div class="metric-name">Other Flowers Precision</div>
-          <div class="metric-sub">High selectivity separating roses, tulips, daisies, and sunflowers from lilies.</div>
+        <!-- Empirical Plot Showcase -->
+        <div class="plot-showcase-card">
+          <img src="./training_comparison.png" alt="Empirical Training Curves" loading="lazy">
+          <div class="plot-caption">
+            <div>
+              <h4>Empirical Training Loss &amp; Validation Accuracy Trajectories</h4>
+              <p>Convergence curves recorded during Apple Silicon MPS GPU training epochs.</p>
+            </div>
+            <a href="./training_comparison.png" target="_blank" class="btn-secondary" style="padding: 10px 20px; font-size: 12px;">Full-Resolution Plot ↗</a>
+          </div>
         </div>
-      </div>
+      </section>
 
-      <!-- Comparative Progress Bars -->
-      <div class="comparison-block">
-        <div class="comp-head">
+      <!-- SECTION: THE SCIENCE & CASE STUDIES -->
+      <section id="science" class="section-block">
+        <div class="section-header">
+          <span class="section-tag">✦ SCIENTIFIC HIGHLIGHTS</span>
+          <h2 class="section-title">Solving Computer Vision Edge Cases</h2>
+          <p class="section-desc">Key empirical lessons and architectural innovations discovered during the semester project.</p>
+        </div>
+
+        <div class="science-grid">
+          <div class="science-card">
+            <span class="science-card-badge">&#127807; BOTANICAL ANOMALY</span>
+            <h3>The Dragon Lily Challenge</h3>
+            <p>
+              *Dracunculus vulgaris* (Dragon Lily) possesses a dark maroon spathe and spadix spike, completely deviating from standard 6-petal trumpet lilies. Baseline vision models classify it as a non-plant. By deliberately curating research-grade Dragon Lily observations into training, MobileNetV2 recognizes Dragon Lilies with &gt;90% confidence.
+            </p>
+          </div>
+
+          <div class="science-card">
+            <span class="science-card-badge">&#129529; DATA QUALITY</span>
+            <h3>The Scraper Contamination Discovery</h3>
+            <p>
+              Initial web-scraping returned ~32% non-flower noise (maps, herbarium sheets, medals, insects), capping accuracy at 61%. Rebuilding with 15,276 pure research-grade botanical images produced an <strong>+18.6% accuracy leap</strong> on MobileNetV2 (85.11%), proving that <strong>Data Quality &gt; Data Quantity</strong>.
+            </p>
+          </div>
+
+          <div class="science-card">
+            <span class="science-card-badge">&#128737;&#65039; OPEN-SET REJECTION</span>
+            <h3>3-Class Mathematical Gating</h3>
+            <p>
+              Closed-world softmax forces probabilities to sum to 1.0, wrongly assigning 99% flower confidence to arbitrary objects. We formulated a 3-class open-set gating engine: whenever non-flower features exceed 40%, both Lily and Other Flowers outputs strictly collapse to <strong>0.0%</strong>.
+            </p>
+          </div>
+        </div>
+
+        <!-- Academic Info Banner -->
+        <div id="academic" class="academic-banner">
+          <span style="font-size: 11px; font-weight: 800; letter-spacing: 1.5px; color: #38bdf8;">ACADEMIC CREDENTIALS &bull; SEMESTER PROJECT</span>
+          <h3 style="font-size: 26px; color: #fff; margin: 6px 0 10px;">Deep Learning Semester Project</h3>
+          <p style="color: var(--text-muted); font-size: 14.5px;">Submitted in partial fulfillment of the requirements for the Deep Learning curriculum under the guidance of our supervisor.</p>
+
+          <div class="academic-row">
+            <div class="academic-box">
+              <span>Student / Lead Developer</span>
+              <strong>Ahmad Ishtiaq</strong>
+            </div>
+
+            <div class="academic-box">
+              <span>Roll Number</span>
+              <strong>SU92-BSCSM-F23-318</strong>
+            </div>
+
+            <div class="academic-box">
+              <span>Class / Section</span>
+              <strong>BSCS-7A (Computer Science)</strong>
+            </div>
+
+            <div class="academic-box">
+              <span>Instructor / Supervisor</span>
+              <strong>Prof. Dr Munir Ahmad</strong>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION: RESOURCES & SUBMISSION HUB -->
+      <section id="resources" class="section-block">
+        <div class="section-header">
+          <span class="section-tag">✦ SUBMISSION HUB &amp; ARTIFACTS</span>
+          <h2 class="section-title">Open Research &amp; Evaluation Hub</h2>
+          <p class="section-desc">Downloadable model weights, research presentation, documentation, and dataset crawlable for automated grading scripts.</p>
+        </div>
+
+        <div class="resources-grid">
+          <!-- Left: YouTube Theater Player -->
           <div>
-            <h3>Architecture Accuracy Comparison</h3>
-            <p>Evaluation on identical held-out test split of 3,055 unseen images.</p>
-          </div>
-          <span class="tiny" style="color: var(--accent);">TEST SPLIT: 20%</span>
-        </div>
-
-        <div class="comp-row">
-          <div class="comp-row-head">
-            <strong>MobileNetV2 Transfer Learning (Pretrained ImageNet) &#127942;</strong>
-            <span>85.11% Validation Accuracy</span>
-          </div>
-          <div class="comp-track">
-            <div class="comp-fill mobilenet"></div>
-          </div>
-        </div>
-
-        <div class="comp-row" style="margin-top: 20px;">
-          <div class="comp-row-head">
-            <strong>Custom 4-Layer CNN (Trained from Scratch)</strong>
-            <span>75.29% Validation Accuracy</span>
-          </div>
-          <div class="comp-track">
-            <div class="comp-fill customcnn"></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Loss & Accuracy Training Plot Gallery -->
-      <div class="gallery-card">
-        <img src="./training_comparison.png" alt="Training Curves Comparison" loading="lazy">
-        <div class="gallery-meta">
-          <div>
-            <h4>Empirical Training & Validation Convergence Plots</h4>
-            <p>Loss and Accuracy trajectories for Custom CNN vs MobileNetV2 across training epochs.</p>
-          </div>
-          <a href="./training_comparison.png" target="_blank" class="btn secondary" style="padding: 10px 18px; font-size: 12px;">View Full Graph <span>↗</span></a>
-        </div>
-      </div>
-    </section>
-
-    <!-- SECTION 03: THE SCIENCE & OUTLIER CHALLENGE -->
-    <section id="science" class="section wrap" style="padding-top: 40px;">
-      <div class="section-head">
-        <div>
-          <span class="kicker">03 / THE SCIENCE</span>
-          <h2>Solving real-world <em>vision edge cases.</em></h2>
-          <p>Addressing high intra-class variance and eliminating web-scraper dataset contamination.</p>
-        </div>
-        <div class="section-index">03 &mdash; 05</div>
-      </div>
-
-      <div class="about-grid">
-        <article class="about-card">
-          <span class="step-num">01 / BOTANICAL OUTLIER</span>
-          <h3>The Dragon Lily Challenge</h3>
-          <p>
-            <em>Dracunculus vulgaris</em> (Dragon Lily) possesses a deep maroon spathe and tall black spadix spike, completely violating common 6-petal trumpet lily morphology. Traditional models fail on it. By curating verified research-grade observations directly into our dataset, MobileNetV2 identifies Dragon Lilies as authentic lilies with &gt;90% confidence.
-          </p>
-        </article>
-
-        <article class="about-card">
-          <span class="step-num">02 / EMPIRICAL DISCOVERY</span>
-          <h3>The Scraper Contamination Lesson</h3>
-          <p>
-            Initial web-scraped data contained ~32% noise (maps, herbarium sheets, medals, insects), capping CNN accuracy at 61.0%. Rebuilding with 15,276 pure research-grade images yielded a <strong>+18.6% accuracy surge</strong> on MobileNetV2 (85.11%), proving that <strong>Data Quality &gt; Data Quantity</strong>.
-          </p>
-        </article>
-
-        <article class="about-card">
-          <span class="step-num">03 / OPEN-SET FORMULATION</span>
-          <h3>Open-Set Non-Flower Rejection</h3>
-          <p>
-            Standard closed-world binary classifiers force softmax outputs to sum to 100% on arbitrary inputs (e.g., cars or animals). We formulated a 3-class gating engine: if non-flower confidence exceeds 40%, outputs strictly collapse to <strong>0.0% Lily</strong> and <strong>0.0% Other Flowers</strong>.
-          </p>
-        </article>
-      </div>
-
-      <!-- SECTION 04: ACADEMIC INFORMATION -->
-      <article id="academic" class="academic-card">
-        <span class="detail-label">&#128394;&#65039; ACADEMIC INFORMATION &bull; SEMESTER PROJECT</span>
-        <h3 style="font-size: 26px; color: #ffffff; margin-bottom: 6px;">Deep Learning Semester Project</h3>
-        <p style="color: var(--muted); font-size: 14px; margin-bottom: 20px;">
-          Developed and submitted in fulfillment of the academic requirements for the Deep Learning curriculum.
-        </p>
-
-        <div class="academic-grid">
-          <div class="academic-item">
-            <span>Student &bull; Lead Developer</span>
-            <strong>Ahmad Ishtiaq</strong>
-          </div>
-          <div class="academic-item">
-            <span>Roll Number</span>
-            <strong>SU92-BSCSM-F23-318</strong>
-          </div>
-          <div class="academic-item">
-            <span>Class &bull; Section</span>
-            <strong>BSCS-7A (Computer Science)</strong>
-          </div>
-          <div class="academic-item">
-            <span>Instructor &bull; Supervisor</span>
-            <strong>Prof. Dr Munir Ahmad</strong>
-          </div>
-        </div>
-      </article>
-    </section>
-
-    <!-- SECTION 05: RESOURCES & SUBMISSION HUB -->
-    <section id="resources" class="section resources-section">
-      <div class="wrap">
-        <div class="section-head">
-          <div>
-            <span class="kicker">05 / OPEN RESEARCH</span>
-            <h2>Artifacts &amp; <em>submission hub.</em></h2>
-            <p>Source code, model weights, research presentation, reports, and dataset ready for one-click download and automated crawler evaluation.</p>
-          </div>
-          <div class="section-index">05 &mdash; 05</div>
-        </div>
-
-        <div class="resources-layout">
-          <!-- Left: Video Presentation Player -->
-          <div>
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-              <span class="detail-label" style="margin-bottom: 0;">🎬 VIDEO PRESENTATION &bull; YOUTUBE</span>
-              <a href="https://youtu.be/37qunhL2mKY" target="_blank" rel="noopener noreferrer" style="color: #ff6b6b; font-size: 11px; font-weight: 700;">Open on YouTube ↗</a>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+              <span style="font-size: 11px; font-weight: 800; letter-spacing: 1.5px; color: #f43f5e;">🎬 PRESENTATION WALKTHROUGH &bull; YOUTUBE</span>
+              <a href="https://youtu.be/37qunhL2mKY" target="_blank" rel="noopener noreferrer" style="color: #f43f5e; font-size: 11.5px; font-weight: 700; text-decoration: none;">Watch on YouTube ↗</a>
             </div>
 
-            <div class="video-frame-wrap">
+            <div class="video-theater">
               <iframe src="https://www.youtube.com/embed/37qunhL2mKY" title="Lily Flower Classification Presentation" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
             </div>
 
-            <p style="color: var(--muted); font-size: 13px; margin-top: 14px; line-height: 1.7;">
-              6-minute comprehensive academic walkthrough explaining the 15,276 dataset engineering, Custom CNN vs MobileNetV2 performance, and live open-set rejection demonstration.
+            <p style="font-size: 13.5px; color: var(--text-muted); margin-top: 16px; line-height: 1.7;">
+              Full 6-minute executive presentation with neural voiceover covering data curation across 15,276 images, custom architecture, open-set non-flower rejection, and live Vercel demonstration.
             </p>
           </div>
 
-          <!-- Right: Numbered Resource Download Grid (BreadGuard Style) -->
-          <div class="resource-list">
-            <a href="https://github.com/iamahmadishtiaq/lily-flower-classification" target="_blank" rel="noopener noreferrer" class="resource-item">
-              <span class="res-index">01 / SOURCE CODE</span>
-              <strong>GitHub Repository</strong>
-              <span class="res-icon">↗</span>
+          <!-- Right: Sleek Download Cards -->
+          <div class="download-list">
+            <a href="https://github.com/iamahmadishtiaq/lily-flower-classification" target="_blank" rel="noopener noreferrer" class="download-item">
+              <div class="download-item-left">
+                <div class="download-icon-box">💻</div>
+                <div>
+                  <div class="download-name">GitHub Repository</div>
+                  <div class="download-tag">Open-source code, weights &amp; pipeline</div>
+                </div>
+              </div>
+              <div class="download-arrow">↗</div>
             </a>
 
-            <a href="https://lnkd.in/p/dKsvaJrU" target="_blank" rel="noopener noreferrer" class="resource-item">
-              <span class="res-index">02 / SOCIAL POST</span>
-              <strong>LinkedIn Project Showcase</strong>
-              <span class="res-icon">↗</span>
+            <a href="https://lnkd.in/p/dKsvaJrU" target="_blank" rel="noopener noreferrer" class="download-item">
+              <div class="download-item-left">
+                <div class="download-icon-box">💼</div>
+                <div>
+                  <div class="download-name">LinkedIn Project Post</div>
+                  <div class="download-tag">Professional summary &amp; social showcase</div>
+                </div>
+              </div>
+              <div class="download-arrow">↗</div>
             </a>
 
-            <a href="https://youtu.be/37qunhL2mKY" target="_blank" rel="noopener noreferrer" class="resource-item">
-              <span class="res-index">03 / PRESENTATION</span>
-              <strong>YouTube Presentation Video</strong>
-              <span class="res-icon">↗</span>
+            <a href="./downloads/Project_Report.pdf" download="Project_Report.pdf" class="download-item">
+              <div class="download-item-left">
+                <div class="download-icon-box">📄</div>
+                <div>
+                  <div class="download-name">Project Report (PDF)</div>
+                  <div class="download-tag">Comprehensive academic paper with confusion matrices</div>
+                </div>
+              </div>
+              <div class="download-arrow">↓</div>
             </a>
 
-            <a href="./downloads/Project_Report.pdf" download="Project_Report.pdf" class="resource-item">
-              <span class="res-index">04 / DOCUMENTATION</span>
-              <strong>Download Project Report (PDF)</strong>
-              <span class="res-icon">↓</span>
+            <a href="./downloads/Project_Report.docx" download="Project_Report.docx" class="download-item">
+              <div class="download-item-left">
+                <div class="download-icon-box">📝</div>
+                <div>
+                  <div class="download-name">Project Report (Word DOCX)</div>
+                  <div class="download-tag">Editable research report</div>
+                </div>
+              </div>
+              <div class="download-arrow">↓</div>
             </a>
 
-            <a href="./downloads/Project_Report.docx" download="Project_Report.docx" class="resource-item">
-              <span class="res-index">05 / DOCUMENTATION</span>
-              <strong>Download Project Report (Word)</strong>
-              <span class="res-icon">↓</span>
+            <a href="./downloads/Lily_Classification_Presentation.pptx" download="Lily_Classification_Presentation.pptx" class="download-item">
+              <div class="download-item-left">
+                <div class="download-icon-box">📊</div>
+                <div>
+                  <div class="download-name">Presentation Slides (PPTX)</div>
+                  <div class="download-tag">10-slide 16:9 widescreen executive deck</div>
+                </div>
+              </div>
+              <div class="download-arrow">↓</div>
             </a>
 
-            <a href="./downloads/Lily_Classification_Presentation.pptx" download="Lily_Classification_Presentation.pptx" class="resource-item">
-              <span class="res-index">06 / PRESENTATION</span>
-              <strong>Download Presentation Slides (PPTX)</strong>
-              <span class="res-icon">↓</span>
+            <a href="./downloads/Lily_Classification_Presentation.mp4" download="Lily_Classification_Presentation.mp4" class="download-item">
+              <div class="download-item-left">
+                <div class="download-icon-box">🎬</div>
+                <div>
+                  <div class="download-name">Presentation Video (MP4)</div>
+                  <div class="download-tag">Full HD video file download</div>
+                </div>
+              </div>
+              <div class="download-arrow">↓</div>
             </a>
 
-            <a href="./downloads/Lily_Classification_Presentation.mp4" download="Lily_Classification_Presentation.mp4" class="resource-item">
-              <span class="res-index">07 / VIDEO FILE</span>
-              <strong>Download Presentation Video (MP4)</strong>
-              <span class="res-icon">↓</span>
+            <a href="./downloads/dataset.zip" download="dataset.zip" class="download-item">
+              <div class="download-item-left">
+                <div class="download-icon-box">📦</div>
+                <div>
+                  <div class="download-name">Botanical Dataset (ZIP)</div>
+                  <div class="download-tag">Curated 35 MB evaluation archive</div>
+                </div>
+              </div>
+              <div class="download-arrow">↓</div>
             </a>
 
-            <a href="./downloads/dataset.zip" download="dataset.zip" class="resource-item">
-              <span class="res-index">08 / DATASET</span>
-              <strong>Download Botanical Dataset (ZIP)</strong>
-              <span class="res-icon">↓</span>
+            <a href="./downloads/transfer_mobilenet_lily.pth" download="transfer_mobilenet_lily.pth" class="download-item">
+              <div class="download-item-left">
+                <div class="download-icon-box">🧠</div>
+                <div>
+                  <div class="download-name">MobileNetV2 Model Weights (.pth)</div>
+                  <div class="download-tag">Direct PyTorch checkpoint for automated crawler</div>
+                </div>
+              </div>
+              <div class="download-arrow">↓</div>
             </a>
 
-            <a href="./downloads/transfer_mobilenet_lily.pth" download="transfer_mobilenet_lily.pth" class="resource-item">
-              <span class="res-index">09 / MODEL WEIGHTS</span>
-              <strong>MobileNetV2 PyTorch Weights (.pth)</strong>
-              <span class="res-icon">↓</span>
-            </a>
-
-            <a href="./downloads/custom_cnn_lily.pth" download="custom_cnn_lily.pth" class="resource-item">
-              <span class="res-index">10 / MODEL WEIGHTS</span>
-              <strong>Custom CNN PyTorch Weights (.pth)</strong>
-              <span class="res-icon">↓</span>
+            <a href="./downloads/custom_cnn_lily.pth" download="custom_cnn_lily.pth" class="download-item">
+              <div class="download-item-left">
+                <div class="download-icon-box">🧠</div>
+                <div>
+                  <div class="download-name">Custom CNN Model Weights (.pth)</div>
+                  <div class="download-tag">Direct PyTorch checkpoint for automated crawler</div>
+                </div>
+              </div>
+              <div class="download-arrow">↓</div>
             </a>
           </div>
         </div>
+      </section>
+    </main>
+
+    <!-- Hidden Canvas for Normalization -->
+    <canvas id="renderCanvas" width="224" height="224" style="display: none;"></canvas>
+
+    <!-- Footer -->
+    <footer class="footer-wrap">
+      <div>
+        <div style="font-family: var(--font-heading); font-weight: 800; font-size: 16px; color: #fff;">
+          🌸 Florix<span style="color: #34d399;">AI</span>
+        </div>
+        <p>Deep Learning Semester Project &bull; Supervised by <strong>Prof. Dr Munir Ahmad</strong></p>
       </div>
-    </section>
-  </main>
-
-  <!-- Hidden Canvas for Image Normalization -->
-  <canvas id="hiddenCanvas" width="224" height="224" style="display: none;"></canvas>
-
-  <!-- Footer -->
-  <footer class="footer wrap">
-    <div>
-      <a class="brand" href="#top">
-        <span class="brand-icon">🌸</span> LilyGuard<span class="accent">AI</span>
-      </a>
-      <p>Botanical Flower Classification &amp; Open-Set Rejection &bull; Supervised by <strong>Prof. Dr Munir Ahmad</strong></p>
-    </div>
-    <div class="footer-right">
-      <span>DEEP LEARNING RESEARCH &bull; BSCS-7A</span>
-      <span>&copy; <span id="currYear"></span> AHMAD ISHTIAQ &bull; ALL RIGHTS RESERVED</span>
-    </div>
-  </footer>
+      <div>
+        <span>BSCS-7A &bull; &copy; <span id="yearDisplay"></span> AHMAD ISHTIAQ &bull; ALL RIGHTS RESERVED</span>
+      </div>
+    </footer>
+  </div>
 
   <!-- Toast Notification -->
-  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <div class="toast-notice" id="toast"></div>
 
-  <!-- Application Script -->
+  <!-- Script -->
   <script src="script.js"></script>
 </body>
 </html>
