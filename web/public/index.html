@@ -1,433 +1,512 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>🌸 Lily Flower Classifier | Deep Learning Semester Project</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#06100d">
+  <title>🌸 LilyGuard AI — Botanical Flower Classification & Open-Set Rejection</title>
+  <meta name="description" content="LilyGuard AI: An enterprise deep learning system for botanical lily flower classification with open-set non-flower rejection.">
+  
+  <!-- Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- ONNX Web Runtime (Client-Side WASM) -->
   <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web@1.19.2/dist/ort.min.js"></script>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
-    body { background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); min-height: 100vh; padding: 24px 14px; color: #1e293b; }
-    .container { max-width: 860px; margin: 0 auto; background: #ffffff; border-radius: 24px; box-shadow: 0 20px 45px rgba(15, 23, 42, 0.08); padding: 36px 30px; }
-    
-    header { text-align: center; margin-bottom: 24px; }
-    .project-pill { display: inline-block; font-size: 11px; font-weight: 700; color: #059669; background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 20px; padding: 4px 14px; margin-bottom: 8px; letter-spacing: 0.5px; }
-    h1 { font-size: 30px; font-weight: 800; color: #0f172a; margin-bottom: 6px; }
-    p.subtitle { color: #64748b; font-size: 14px; margin-bottom: 12px; }
-    
-    /* Academic Meta Badge */
-    .academic-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 14px; padding: 12px 18px; margin-bottom: 24px; font-size: 12.5px; color: #475569; display: flex; flex-wrap: wrap; justify-content: space-around; gap: 10px; text-align: center; }
-    .academic-card strong { color: #0f172a; }
-    
-    /* Metrics Summary Bar */
-    .metrics-bar { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 24px; }
-    .metric-item { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 14px; padding: 12px; text-align: center; }
-    .metric-value { font-size: 18px; font-weight: 800; color: #059669; }
-    .metric-label { font-size: 11px; font-weight: 600; color: #64748b; margin-top: 2px; text-transform: uppercase; letter-spacing: 0.5px; }
-    
-    /* Downloads & Links Hub */
-    .hub-section { margin-bottom: 28px; background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 18px; padding: 20px; }
-    .hub-title { font-size: 13px; font-weight: 700; color: #334155; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between; }
-    .crawler-notice { font-size: 11px; font-weight: 600; color: #059669; background: #ecfdf5; padding: 3px 10px; border-radius: 10px; text-transform: none; }
-    .btn-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; }
-    .action-btn { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 11px 14px; border-radius: 12px; font-size: 12.5px; font-weight: 600; text-decoration: none; transition: all 0.2s ease; cursor: pointer; border: 1px solid transparent; }
-    
-    .btn-primary { background: #059669; color: #ffffff; }
-    .btn-primary:hover { background: #047857; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25); }
-    
-    .btn-secondary { background: #0284c7; color: #ffffff; }
-    .btn-secondary:hover { background: #0369a1; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25); }
-    
-    .btn-amber { background: #d97706; color: #ffffff; }
-    .btn-amber:hover { background: #b45309; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(217, 119, 6, 0.25); }
-    
-    .btn-youtube { background: #ef4444; color: #ffffff; }
-    .btn-youtube:hover { background: #dc2626; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25); }
-
-    .btn-linkedin { background: #0a66c2; color: #ffffff; }
-    .btn-linkedin:hover { background: #084e96; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(10, 102, 194, 0.25); }
-    
-    .btn-dark { background: #0f172a; color: #ffffff; }
-    .btn-dark:hover { background: #1e293b; transform: translateY(-1px); }
-    
-    .btn-weights { background: #4f46e5; color: #ffffff; }
-    .btn-weights:hover { background: #4338ca; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25); }
-
-    .btn-outline { background: #f8fafc; color: #334155; border-color: #cbd5e1; }
-    .btn-outline:hover { background: #f1f5f9; border-color: #94a3b8; }
-    
-    /* Upload Dropzone */
-    .dropzone { border: 2.5px dashed #cbd5e1; border-radius: 18px; padding: 34px 20px; text-align: center; cursor: pointer; transition: all 0.2s ease; background: #fafafa; margin-bottom: 20px; }
-    .dropzone:hover { border-color: #059669; background: #ecfdf5; }
-    .dropzone.dragover { border-color: #059669; background: #ecfdf5; transform: scale(1.01); }
-    .dropzone input { display: none; }
-    .icon { font-size: 42px; margin-bottom: 10px; }
-    .dropzone h3 { font-size: 16px; font-weight: 700; color: #1e293b; margin-bottom: 4px; }
-    .dropzone p { font-size: 12px; color: #64748b; }
-    
-    .preview-box { text-align: center; margin: 20px 0; display: none; }
-    .preview-box img { max-height: 260px; max-width: 100%; border-radius: 14px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); object-fit: cover; }
-    
-    .status-msg { text-align: center; font-size: 13px; color: #64748b; margin: 10px 0; display: none; }
-    
-    /* Result Cards */
-    .results-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 24px; }
-    @media (max-width: 620px) { .results-grid { grid-template-columns: 1fr; } }
-    
-    .card { background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 16px; padding: 20px; position: relative; }
-    .card.highlight { border-color: #059669; background: #f0fdf4; }
-    .card.nonflower { border-color: #ef4444; background: #fef2f2; }
-    
-    .card-title { font-size: 13px; font-weight: 700; color: #334155; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
-    .badge { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 10px; }
-    .badge-green { background: #059669; color: white; }
-    .badge-gray { background: #64748b; color: white; }
-    .badge-red { background: #ef4444; color: white; }
-    
-    .pred-label { font-size: 22px; font-weight: 800; color: #0f172a; margin-bottom: 4px; }
-    .pred-status { font-size: 12px; font-weight: 600; color: #64748b; margin-bottom: 10px; }
-    .pred-conf { font-size: 13px; color: #475569; margin-bottom: 12px; }
-    
-    .bar-wrap { background: #e2e8f0; height: 10px; border-radius: 5px; overflow: hidden; margin-top: 6px; }
-    .bar-fill { height: 100%; background: #059669; border-radius: 5px; transition: width 0.4s ease; }
-    .bar-fill.red { background: #d97706; }
-    .bar-fill.zero { background: #cbd5e1; width: 0% !important; }
-    
-    .breakdown { display: flex; justify-content: space-between; font-size: 12px; color: #475569; margin-top: 8px; font-weight: 500; }
-    
-    .alert-box { display: none; background: #fef2f2; border: 1.5px solid #fecaca; color: #991b1b; padding: 12px 16px; border-radius: 12px; font-size: 13px; font-weight: 600; text-align: center; margin-top: 18px; }
-
-    /* Video Presentation Section */
-    .video-section { margin-top: 28px; background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 18px; padding: 20px; }
-    .video-header { font-size: 13px; font-weight: 700; color: #334155; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between; }
-    .video-container { position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; background: #0f172a; }
-    .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; border-radius: 12px; }
-    
-    footer { text-align: center; margin-top: 32px; padding-top: 20px; border-top: 1px solid #e2e8f0; font-size: 12px; color: #94a3b8; }
-    footer a { color: #059669; text-decoration: none; font-weight: 600; }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <header>
-      <span class="project-pill">SEMESTER PROJECT &bull; DEEP LEARNING</span>
-      <h1>🌸 Lily Flower Classification System</h1>
-      <p class="subtitle">Custom 4-Layer CNN vs. MobileNetV2 Transfer Learning with Open-Set Non-Flower Rejection</p>
-      
-      <div class="academic-card">
-        <div><strong>Student:</strong> Ahmad Ishtiaq</div>
-        <div><strong>Roll No:</strong> SU92-BSCSM-F23-318</div>
-        <div><strong>Section:</strong> BSCS-7A</div>
-        <div><strong>Supervisor:</strong> Prof. Dr Munir Ahmad</div>
-      </div>
+  <!-- Ambient Atmospheric Lighting -->
+  <div class="glow glow-a"></div>
+  <div class="glow glow-b"></div>
 
-      <!-- Quick Metrics Overview -->
-      <div class="metrics-bar">
-        <div class="metric-item">
-          <div class="metric-value">15,276</div>
-          <div class="metric-label">Dataset Images</div>
-        </div>
-        <div class="metric-item">
-          <div class="metric-value">85.11%</div>
-          <div class="metric-label">MobileNetV2 Val Acc</div>
-        </div>
-        <div class="metric-item">
-          <div class="metric-value">75.29%</div>
-          <div class="metric-label">Custom CNN Val Acc</div>
-        </div>
-        <div class="metric-item">
-          <div class="metric-value">0.0%</div>
-          <div class="metric-label">Non-Flower Guarantee</div>
-        </div>
-      </div>
-    </header>
+  <!-- Navigation Bar -->
+  <header class="nav wrap">
+    <a class="brand" href="#top">
+      <span class="brand-icon">🌸</span> LilyGuard<span class="accent">AI</span>
+      <span class="brand-badge">v2.0</span>
+    </a>
+    <nav>
+      <a href="#analyze">Analyze</a>
+      <a href="#performance">Performance</a>
+      <a href="#science">The Science</a>
+      <a href="#academic">Academic Info</a>
+      <a href="#resources">Resources</a>
+    </nav>
+    <a class="nav-cta" href="#analyze">Launch Analyzer <span>↗</span></a>
+  </header>
 
-    <!-- INSTRUCTOR RESOURCES & DOWNLOADS HUB -->
-    <section class="hub-section">
-      <div class="hub-title">
-        <span>📂 Project Resources & Downloads (Submission Hub)</span>
-        <span class="crawler-notice">🤖 Automated Evaluation Crawler Ready</span>
-      </div>
-      <div class="btn-grid">
-        <a href="./downloads/dataset.zip" download="dataset.zip" class="action-btn btn-primary" title="Download curated botanical dataset ZIP">
-          <span>📦</span> Download Dataset (ZIP)
-        </a>
-        <a href="./downloads/Project_Report.pdf" download="Project_Report.pdf" class="action-btn btn-secondary" title="Download academic report in PDF format">
-          <span>📄</span> Project Report (PDF)
-        </a>
-        <a href="./downloads/Project_Report.docx" download="Project_Report.docx" class="action-btn btn-outline" title="Download academic report in Word format">
-          <span>📝</span> Project Report (Word)
-        </a>
-        <a href="./downloads/Lily_Classification_Presentation.pptx" download="Lily_Classification_Presentation.pptx" class="action-btn btn-amber" title="Download presentation slides in PPTX format">
-          <span>📊</span> Presentation (PPTX)
-        </a>
-        <a href="https://youtu.be/37qunhL2mKY" target="_blank" rel="noopener noreferrer" class="action-btn btn-youtube" title="Watch project presentation on YouTube">
-          <span>🎬</span> Presentation Video (YouTube)
-        </a>
-        <a href="https://lnkd.in/p/dKsvaJrU" id="linkedinBtn" target="_blank" rel="noopener noreferrer" class="action-btn btn-linkedin" title="View LinkedIn project post">
-          <span>💼</span> View LinkedIn Post
-        </a>
-        <a href="https://github.com/iamahmadishtiaq/lily-flower-classification" target="_blank" rel="noopener noreferrer" class="action-btn btn-dark" title="View GitHub repository">
-          <span>💻</span> GitHub Repository
-        </a>
-        <a href="./downloads/transfer_mobilenet_lily.pth" download="transfer_mobilenet_lily.pth" class="action-btn btn-weights" title="Direct download MobileNetV2 PyTorch weights for evaluation">
-          <span>🧠</span> MobileNetV2 Weights (.pth)
-        </a>
-        <a href="./downloads/custom_cnn_lily.pth" download="custom_cnn_lily.pth" class="action-btn btn-weights" title="Direct download Custom CNN PyTorch weights for evaluation">
-          <span>🧠</span> Custom CNN Weights (.pth)
-        </a>
-      </div>
-    </section>
-
-    <!-- UPLOAD DROPZONE -->
-    <div class="dropzone" id="dropzone" onclick="document.getElementById('fileInput').click()">
-      <div class="icon">📷</div>
-      <h3>Click to upload flower photo</h3>
-      <p>or drag and drop JPG, PNG, WEBP (Tests Flowers vs. Non-Flowers)</p>
-      <input type="file" id="fileInput" accept="image/*" onchange="handleFile(this.files[0])" />
-    </div>
-
-    <div class="preview-box" id="previewBox">
-      <img id="previewImg" alt="Preview" />
-    </div>
-
-    <div class="status-msg" id="statusMsg">Loading AI models in browser...</div>
-    <div class="alert-box" id="nonFlowerAlert">🚫 Non-Flower Object Detected! Both Lily and Other Flowers percentages are set strictly to 0.0%.</div>
-
-    <!-- PREDICTION RESULTS GRID -->
-    <div class="results-grid" id="resultsGrid" style="display: none;">
-      <!-- Scratch CNN Card -->
-      <div class="card" id="cardScratch">
-        <div class="card-title">
-          <span>🧠 Custom CNN (Scratch)</span>
-          <span class="badge badge-gray" id="badgeScratch">Scratch</span>
+  <main id="top">
+    <!-- Hero Section -->
+    <section class="hero wrap">
+      <div class="hero-content">
+        <div class="eyebrow">
+          <span class="pulse"></span> DEEP LEARNING &bull; BOTANICAL VISION &bull; 15,276 IMAGES
         </div>
-        <div class="pred-label" id="labelScratch">--</div>
-        <div class="pred-status" id="statusScratch">--</div>
-        <div class="pred-conf" id="confScratch">--</div>
-        
-        <div class="bar-wrap">
-          <div class="bar-fill" id="barScratch" style="width: 0%;"></div>
+        <h1>Classify with<br><em>botanical precision.</em></h1>
+        <p class="hero-sub">
+          An enterprise-grade computer vision system distinguishing Lily flowers (*Lilium* genus) from other floral species. Powered by MobileNetV2 and Custom CNN with an Open-Set Non-Flower Rejection engine guaranteeing 0.0% false positives.
+        </p>
+
+        <div class="hero-actions">
+          <a class="btn primary" href="#analyze">Analyze Flower <span>↗</span></a>
+          <a class="btn secondary" href="#performance">Explore the Research <span>&darr;</span></a>
         </div>
-        
-        <div class="breakdown">
-          <span>🌸 Lily: <strong id="lilyScratch">0.0%</strong></span>
-          <span>🌼 Other: <strong id="otherScratch">0.0%</strong></span>
+
+        <div class="hero-stats">
+          <div>
+            <strong>85.11%</strong>
+            <span>MobileNetV2 Val Accuracy &#127942;</span>
+          </div>
+          <div>
+            <strong>75.29%</strong>
+            <span>Custom 4-Layer CNN</span>
+          </div>
+          <div>
+            <strong>15,276</strong>
+            <span>Research-Grade Images</span>
+          </div>
+          <div>
+            <strong style="color: var(--accent);">0.0%</strong>
+            <span>Non-Flower Guarantee</span>
+          </div>
         </div>
       </div>
 
-      <!-- MobileNetV2 Transfer Card -->
-      <div class="card highlight" id="cardTransfer">
-        <div class="card-title">
-          <span>⚡ MobileNetV2 (Transfer)</span>
-          <span class="badge badge-green" id="badgeTransfer">Best Model</span>
+      <!-- Hero Visual Radar Chamber -->
+      <div class="hero-visual">
+        <div class="orbit orbit-1"></div>
+        <div class="orbit orbit-2"></div>
+        <div class="visual-center">
+          <div class="visual-icon">&#127800;</div>
+          <div class="scan-line"></div>
+          <div class="visual-label" id="engineStatus">
+            <span class="status-dot"></span> VISION ENGINE <span>ACTIVE</span>
+          </div>
         </div>
-        <div class="pred-label" id="labelTransfer">--</div>
-        <div class="pred-status" id="statusTransfer">--</div>
-        <div class="pred-conf" id="confTransfer">--</div>
-        
-        <div class="bar-wrap">
-          <div class="bar-fill" id="barTransfer" style="width: 0%;"></div>
-        </div>
-        
-        <div class="breakdown">
-          <span>🌸 Lily: <strong id="lilyTransfer">0.0%</strong></span>
-          <span>🌼 Other: <strong id="otherTransfer">0.0%</strong></span>
-        </div>
-      </div>
-    </div>
 
-    <!-- PRESENTATION & VOICEOVER VIDEO SHOWCASE -->
-    <section class="video-section" id="videoShowcase">
-      <div class="video-header">
-        <span>🎬 Project Presentation & Voiceover Demonstration</span>
-        <a href="https://youtu.be/37qunhL2mKY" target="_blank" rel="noopener noreferrer" id="youtubeDirectLink" style="font-size: 11px; color: #ef4444; text-decoration: none; font-weight: 700;">Open on YouTube ↗</a>
-      </div>
-      <div class="video-container" id="videoContainer">
-        <iframe src="https://www.youtube.com/embed/37qunhL2mKY" title="Lily Flower Classification Presentation" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        <div class="floating-card float-top">
+          <span class="status-dot"></span> In-Browser ONNX Web
+          <strong>0-LATENCY WASM</strong>
+        </div>
+
+        <div class="floating-card float-bottom">
+          <span>&#128737;&#65039;</span> Open-Set Gatekeeper
+          <strong style="color: var(--accent); margin-top: 3px; font-size: 10px;">0% FALSE POSITIVE</strong>
+        </div>
+
+        <div class="visual-caption">RESEARCH PIPELINE / MPS GPU ACCELERATED</div>
       </div>
     </section>
 
-    <footer>
-      <p>Deep Learning Semester Project &bull; Supervised by <strong>Prof. Dr Munir Ahmad</strong></p>
-      <p style="margin-top: 4px;">Engineered with PyTorch, ONNX Runtime Web, and Apple Silicon MPS GPU</p>
-      <p style="margin-top: 6px;"><a href="https://github.com/iamahmadishtiaq/lily-flower-classification" target="_blank" rel="noopener noreferrer">github.com/iamahmadishtiaq/lily-flower-classification</a></p>
-    </footer>
-  </div>
+    <!-- Scrolling Ticker Marquee -->
+    <section class="ticker">
+      <div class="ticker-track">
+        <div class="ticker-content">
+          15,276 BOTANICAL IMAGES <span>&#10035;</span> PYTORCH &bull; ONNX RUNTIME WEB <span>&#10035;</span> 0.0% NON-FLOWER REJECTION GUARANTEE <span>&#10035;</span> MOBILENETV2 (85.11%) VS CUSTOM CNN (75.29%) <span>&#10035;</span> DRACUNCULUS VULGARIS OUTLIER STUDY <span>&#10035;</span> DEEP LEARNING SEMESTER PROJECT &bull; DR. MUNIR AHMAD <span>&#10035;</span> AHMAD ISHTIAQ (SU92-BSCSM-F23-318) <span>&#10035;</span> 15,276 BOTANICAL IMAGES <span>&#10035;</span> PYTORCH &bull; ONNX RUNTIME WEB <span>&#10035;</span>
+        </div>
+      </div>
+    </section>
 
+    <!-- SECTION 01: THE ANALYZER (Interactive Workbench) -->
+    <section id="analyze" class="section wrap">
+      <div class="section-head">
+        <div>
+          <span class="kicker">01 / THE EXPERIENCE</span>
+          <h2>Inspect with <em>intelligence.</em></h2>
+          <p>Upload a flower or object photo to receive real-time botanical classification and non-flower validation.</p>
+        </div>
+        <div class="section-index">01 &mdash; 05</div>
+      </div>
+
+      <!-- Model Selector Tabs -->
+      <div class="model-tabs">
+        <div class="model-tab active" id="tabTransfer">
+          <span>&#9889;</span> MobileNetV2 (Transfer Learning)
+          <span class="badge-sm">85.11% Acc &bull; Recommended</span>
+        </div>
+        <div class="model-tab" id="tabScratch">
+          <span>&#129504;</span> Custom 4-Layer CNN (From Scratch)
+          <span class="badge-sm">75.29% Acc &bull; 4 Conv Blocks</span>
+        </div>
+      </div>
+
+      <div class="analyzer">
+        <!-- Left: Upload Panel -->
+        <div class="upload-panel">
+          <div class="panel-top">
+            <span class="panel-label">
+              <span class="status-dot"></span> IMAGE INPUT
+            </span>
+            <span class="tiny">JPG &bull; PNG &bull; WEBP</span>
+          </div>
+
+          <input id="fileInput" type="file" accept="image/jpeg,image/png,image/webp" hidden>
+
+          <div class="dropzone" id="dropzone" role="button" tabindex="0">
+            <div id="dropzonePrompt">
+              <div class="drop-icon">&#128247;</div>
+              <h3>Drop flower photo here</h3>
+              <p>or click to browse from your device. Tests flowers vs. non-flower objects in real time.</p>
+            </div>
+
+            <div class="preview-container" id="previewBox">
+              <img id="previewImg" alt="Preview">
+              <button type="button" class="btn-change-image" id="btnChangeImage">Change Photo</button>
+            </div>
+          </div>
+
+          <!-- Quick Test Samples -->
+          <div class="samples-strip">
+            <div class="samples-label">&#10024; Quick Test Botanical Samples</div>
+            <div class="samples-grid">
+              <button type="button" class="sample-btn" data-src="./samples/sample_lily.jpg">
+                <img src="./samples/sample_lily.jpg" alt="Lily">
+                <span>🌸 Asiatic Lily</span>
+              </button>
+              <button type="button" class="sample-btn" data-src="./samples/sample_other.jpg">
+                <img src="./samples/sample_other.jpg" alt="Other">
+                <span>🌼 Sunflower</span>
+              </button>
+              <button type="button" class="sample-btn" data-src="./samples/sample_nonflower.jpg">
+                <img src="./samples/sample_nonflower.jpg" alt="Car">
+                <span>🚫 Sports Car</span>
+              </button>
+            </div>
+          </div>
+
+          <button class="btn primary" id="analyzeBtn" style="margin-top: 20px; width: 100%;">
+            Run Analysis <span>↗</span>
+          </button>
+        </div>
+
+        <!-- Right: Results Telemetry Panel -->
+        <div class="result-panel">
+          <div class="panel-top">
+            <span class="panel-label">
+              <span class="status-dot"></span> MODEL TELEMETRY
+            </span>
+            <span class="result-status-tag" id="resultTag">READY FOR INPUT</span>
+          </div>
+
+          <!-- Main Result Callout Card -->
+          <div class="result-main-card" id="resultCard">
+            <span class="result-badge" id="resultBadge">STANDBY MODE</span>
+            <h3 class="result-title" id="resultTitle">Upload or pick a sample</h3>
+            <p class="result-desc" id="resultDesc">
+              Our neural network evaluates botanical structures including tepal symmetry, stamen arrangement, and petal pigmentation, while checking non-flower features.
+            </p>
+
+            <div class="nonflower-notice" id="nonflowerNotice">
+              <span>&#128737;&#65039;</span>
+              <div>
+                <strong>Safety Policy Enforced:</strong> Non-flower object verified. Both Lily and Other Flowers percentages are set strictly to <strong>0.0%</strong> to eliminate false positives.
+              </div>
+            </div>
+          </div>
+
+          <!-- Detailed Probability Meters -->
+          <div class="prob-group">
+            <div class="prob-row">
+              <div class="prob-header">
+                <span>🌸 Lily Flower Probability</span>
+                <strong id="lilyProb">&mdash;</strong>
+              </div>
+              <div class="prob-track">
+                <div class="prob-bar lily" id="lilyBar"></div>
+              </div>
+            </div>
+
+            <div class="prob-row">
+              <div class="prob-header">
+                <span>🌼 Other Flowers Probability</span>
+                <strong id="otherProb">&mdash;</strong>
+              </div>
+              <div class="prob-track">
+                <div class="prob-bar other" id="otherBar"></div>
+              </div>
+            </div>
+
+            <div class="prob-row">
+              <div class="prob-header">
+                <span>🚫 Non-Flower Rejection Confidence</span>
+                <strong id="nonflowerProb">&mdash;</strong>
+              </div>
+              <div class="prob-track">
+                <div class="prob-bar nonflower" id="nonflowerBar"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 02: PERFORMANCE & BENCHMARK -->
+    <section id="performance" class="section wrap" style="padding-top: 40px;">
+      <div class="section-head">
+        <div>
+          <span class="kicker">02 / THE BENCHMARK</span>
+          <h2>Empirical <em>superiority.</em></h2>
+          <p>Trained and validated on 15,276 botanical images (12,221 train / 3,055 held-out validation) using Apple Silicon MPS GPU acceleration.</p>
+        </div>
+        <div class="section-index">02 &mdash; 05</div>
+      </div>
+
+      <!-- Metric Cards Grid -->
+      <div class="metric-grid">
+        <div class="metric-card">
+          <div class="metric-num">85.11%</div>
+          <div class="metric-name">MobileNetV2 Accuracy &#127942;</div>
+          <div class="metric-sub">ImageNet Transfer Learning backbone with customized dense classification head.</div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-num">91.01%</div>
+          <div class="metric-name">Lily Detection Recall</div>
+          <div class="metric-sub">942 out of 1035 genuine lilies detected across extreme morphological variants.</div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-num">90.35%</div>
+          <div class="metric-name">Non-Flower Rejection</div>
+          <div class="metric-sub">908 out of 1005 non-flower objects accurately rejected with 0.0% false output.</div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-num">91.35%</div>
+          <div class="metric-name">Other Flowers Precision</div>
+          <div class="metric-sub">High selectivity separating roses, tulips, daisies, and sunflowers from lilies.</div>
+        </div>
+      </div>
+
+      <!-- Comparative Progress Bars -->
+      <div class="comparison-block">
+        <div class="comp-head">
+          <div>
+            <h3>Architecture Accuracy Comparison</h3>
+            <p>Evaluation on identical held-out test split of 3,055 unseen images.</p>
+          </div>
+          <span class="tiny" style="color: var(--accent);">TEST SPLIT: 20%</span>
+        </div>
+
+        <div class="comp-row">
+          <div class="comp-row-head">
+            <strong>MobileNetV2 Transfer Learning (Pretrained ImageNet) &#127942;</strong>
+            <span>85.11% Validation Accuracy</span>
+          </div>
+          <div class="comp-track">
+            <div class="comp-fill mobilenet"></div>
+          </div>
+        </div>
+
+        <div class="comp-row" style="margin-top: 20px;">
+          <div class="comp-row-head">
+            <strong>Custom 4-Layer CNN (Trained from Scratch)</strong>
+            <span>75.29% Validation Accuracy</span>
+          </div>
+          <div class="comp-track">
+            <div class="comp-fill customcnn"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Loss & Accuracy Training Plot Gallery -->
+      <div class="gallery-card">
+        <img src="./training_comparison.png" alt="Training Curves Comparison" loading="lazy">
+        <div class="gallery-meta">
+          <div>
+            <h4>Empirical Training & Validation Convergence Plots</h4>
+            <p>Loss and Accuracy trajectories for Custom CNN vs MobileNetV2 across training epochs.</p>
+          </div>
+          <a href="./training_comparison.png" target="_blank" class="btn secondary" style="padding: 10px 18px; font-size: 12px;">View Full Graph <span>↗</span></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 03: THE SCIENCE & OUTLIER CHALLENGE -->
+    <section id="science" class="section wrap" style="padding-top: 40px;">
+      <div class="section-head">
+        <div>
+          <span class="kicker">03 / THE SCIENCE</span>
+          <h2>Solving real-world <em>vision edge cases.</em></h2>
+          <p>Addressing high intra-class variance and eliminating web-scraper dataset contamination.</p>
+        </div>
+        <div class="section-index">03 &mdash; 05</div>
+      </div>
+
+      <div class="about-grid">
+        <article class="about-card">
+          <span class="step-num">01 / BOTANICAL OUTLIER</span>
+          <h3>The Dragon Lily Challenge</h3>
+          <p>
+            <em>Dracunculus vulgaris</em> (Dragon Lily) possesses a deep maroon spathe and tall black spadix spike, completely violating common 6-petal trumpet lily morphology. Traditional models fail on it. By curating verified research-grade observations directly into our dataset, MobileNetV2 identifies Dragon Lilies as authentic lilies with &gt;90% confidence.
+          </p>
+        </article>
+
+        <article class="about-card">
+          <span class="step-num">02 / EMPIRICAL DISCOVERY</span>
+          <h3>The Scraper Contamination Lesson</h3>
+          <p>
+            Initial web-scraped data contained ~32% noise (maps, herbarium sheets, medals, insects), capping CNN accuracy at 61.0%. Rebuilding with 15,276 pure research-grade images yielded a <strong>+18.6% accuracy surge</strong> on MobileNetV2 (85.11%), proving that <strong>Data Quality &gt; Data Quantity</strong>.
+          </p>
+        </article>
+
+        <article class="about-card">
+          <span class="step-num">03 / OPEN-SET FORMULATION</span>
+          <h3>Open-Set Non-Flower Rejection</h3>
+          <p>
+            Standard closed-world binary classifiers force softmax outputs to sum to 100% on arbitrary inputs (e.g., cars or animals). We formulated a 3-class gating engine: if non-flower confidence exceeds 40%, outputs strictly collapse to <strong>0.0% Lily</strong> and <strong>0.0% Other Flowers</strong>.
+          </p>
+        </article>
+      </div>
+
+      <!-- SECTION 04: ACADEMIC INFORMATION -->
+      <article id="academic" class="academic-card">
+        <span class="detail-label">&#128394;&#65039; ACADEMIC INFORMATION &bull; SEMESTER PROJECT</span>
+        <h3 style="font-size: 26px; color: #ffffff; margin-bottom: 6px;">Deep Learning Semester Project</h3>
+        <p style="color: var(--muted); font-size: 14px; margin-bottom: 20px;">
+          Developed and submitted in fulfillment of the academic requirements for the Deep Learning curriculum.
+        </p>
+
+        <div class="academic-grid">
+          <div class="academic-item">
+            <span>Student &bull; Lead Developer</span>
+            <strong>Ahmad Ishtiaq</strong>
+          </div>
+          <div class="academic-item">
+            <span>Roll Number</span>
+            <strong>SU92-BSCSM-F23-318</strong>
+          </div>
+          <div class="academic-item">
+            <span>Class &bull; Section</span>
+            <strong>BSCS-7A (Computer Science)</strong>
+          </div>
+          <div class="academic-item">
+            <span>Instructor &bull; Supervisor</span>
+            <strong>Prof. Dr Munir Ahmad</strong>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <!-- SECTION 05: RESOURCES & SUBMISSION HUB -->
+    <section id="resources" class="section resources-section">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <span class="kicker">05 / OPEN RESEARCH</span>
+            <h2>Artifacts &amp; <em>submission hub.</em></h2>
+            <p>Source code, model weights, research presentation, reports, and dataset ready for one-click download and automated crawler evaluation.</p>
+          </div>
+          <div class="section-index">05 &mdash; 05</div>
+        </div>
+
+        <div class="resources-layout">
+          <!-- Left: Video Presentation Player -->
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span class="detail-label" style="margin-bottom: 0;">🎬 VIDEO PRESENTATION &bull; YOUTUBE</span>
+              <a href="https://youtu.be/37qunhL2mKY" target="_blank" rel="noopener noreferrer" style="color: #ff6b6b; font-size: 11px; font-weight: 700;">Open on YouTube ↗</a>
+            </div>
+
+            <div class="video-frame-wrap">
+              <iframe src="https://www.youtube.com/embed/37qunhL2mKY" title="Lily Flower Classification Presentation" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            </div>
+
+            <p style="color: var(--muted); font-size: 13px; margin-top: 14px; line-height: 1.7;">
+              6-minute comprehensive academic walkthrough explaining the 15,276 dataset engineering, Custom CNN vs MobileNetV2 performance, and live open-set rejection demonstration.
+            </p>
+          </div>
+
+          <!-- Right: Numbered Resource Download Grid (BreadGuard Style) -->
+          <div class="resource-list">
+            <a href="https://github.com/iamahmadishtiaq/lily-flower-classification" target="_blank" rel="noopener noreferrer" class="resource-item">
+              <span class="res-index">01 / SOURCE CODE</span>
+              <strong>GitHub Repository</strong>
+              <span class="res-icon">↗</span>
+            </a>
+
+            <a href="https://lnkd.in/p/dKsvaJrU" target="_blank" rel="noopener noreferrer" class="resource-item">
+              <span class="res-index">02 / SOCIAL POST</span>
+              <strong>LinkedIn Project Showcase</strong>
+              <span class="res-icon">↗</span>
+            </a>
+
+            <a href="https://youtu.be/37qunhL2mKY" target="_blank" rel="noopener noreferrer" class="resource-item">
+              <span class="res-index">03 / PRESENTATION</span>
+              <strong>YouTube Presentation Video</strong>
+              <span class="res-icon">↗</span>
+            </a>
+
+            <a href="./downloads/Project_Report.pdf" download="Project_Report.pdf" class="resource-item">
+              <span class="res-index">04 / DOCUMENTATION</span>
+              <strong>Download Project Report (PDF)</strong>
+              <span class="res-icon">↓</span>
+            </a>
+
+            <a href="./downloads/Project_Report.docx" download="Project_Report.docx" class="resource-item">
+              <span class="res-index">05 / DOCUMENTATION</span>
+              <strong>Download Project Report (Word)</strong>
+              <span class="res-icon">↓</span>
+            </a>
+
+            <a href="./downloads/Lily_Classification_Presentation.pptx" download="Lily_Classification_Presentation.pptx" class="resource-item">
+              <span class="res-index">06 / PRESENTATION</span>
+              <strong>Download Presentation Slides (PPTX)</strong>
+              <span class="res-icon">↓</span>
+            </a>
+
+            <a href="./downloads/Lily_Classification_Presentation.mp4" download="Lily_Classification_Presentation.mp4" class="resource-item">
+              <span class="res-index">07 / VIDEO FILE</span>
+              <strong>Download Presentation Video (MP4)</strong>
+              <span class="res-icon">↓</span>
+            </a>
+
+            <a href="./downloads/dataset.zip" download="dataset.zip" class="resource-item">
+              <span class="res-index">08 / DATASET</span>
+              <strong>Download Botanical Dataset (ZIP)</strong>
+              <span class="res-icon">↓</span>
+            </a>
+
+            <a href="./downloads/transfer_mobilenet_lily.pth" download="transfer_mobilenet_lily.pth" class="resource-item">
+              <span class="res-index">09 / MODEL WEIGHTS</span>
+              <strong>MobileNetV2 PyTorch Weights (.pth)</strong>
+              <span class="res-icon">↓</span>
+            </a>
+
+            <a href="./downloads/custom_cnn_lily.pth" download="custom_cnn_lily.pth" class="resource-item">
+              <span class="res-index">10 / MODEL WEIGHTS</span>
+              <strong>Custom CNN PyTorch Weights (.pth)</strong>
+              <span class="res-icon">↓</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Hidden Canvas for Image Normalization -->
   <canvas id="hiddenCanvas" width="224" height="224" style="display: none;"></canvas>
 
-  <script>
-    let sessionScratch = null;
-    let sessionTransfer = null;
+  <!-- Footer -->
+  <footer class="footer wrap">
+    <div>
+      <a class="brand" href="#top">
+        <span class="brand-icon">🌸</span> LilyGuard<span class="accent">AI</span>
+      </a>
+      <p>Botanical Flower Classification &amp; Open-Set Rejection &bull; Supervised by <strong>Prof. Dr Munir Ahmad</strong></p>
+    </div>
+    <div class="footer-right">
+      <span>DEEP LEARNING RESEARCH &bull; BSCS-7A</span>
+      <span>&copy; <span id="currYear"></span> AHMAD ISHTIAQ &bull; ALL RIGHTS RESERVED</span>
+    </div>
+  </footer>
 
-    let youtubeVideoUrl = "https://youtu.be/37qunhL2mKY";
+  <!-- Toast Notification -->
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-    function openYouTubeVideo() {
-      window.open(youtubeVideoUrl, "_blank");
-    }
-
-    // Drag and drop handlers
-    const dropzone = document.getElementById('dropzone');
-    dropzone.addEventListener('dragover', (e) => { e.preventDefault(); dropzone.classList.add('dragover'); });
-    dropzone.addEventListener('dragleave', () => dropzone.classList.remove('dragover'));
-    dropzone.addEventListener('drop', (e) => {
-      e.preventDefault();
-      dropzone.classList.remove('dragover');
-      if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
-    });
-
-    async function loadModels() {
-      const msg = document.getElementById('statusMsg');
-      msg.style.display = 'block';
-      msg.innerText = 'Initializing ONNX web runtimes...';
-
-      try {
-        sessionScratch = await ort.InferenceSession.create('./models/custom_cnn_lily.onnx', { executionProviders: ['wasm'] });
-        sessionTransfer = await ort.InferenceSession.create('./models/mobilenetv2_lily.onnx', { executionProviders: ['wasm'] });
-        msg.innerText = '✅ Deep Learning models loaded & ready for instant testing!';
-        setTimeout(() => { msg.style.display = 'none'; }, 2200);
-      } catch (err) {
-        msg.innerText = '⚠️ Running in local preview mode. (Note: Models load automatically when served via HTTP/Vercel: ' + err.message + ')';
-      }
-    }
-
-    loadModels();
-
-    function handleFile(file) {
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const img = document.getElementById('previewImg');
-        img.src = e.target.result;
-        document.getElementById('previewBox').style.display = 'block';
-        img.onload = () => runInference(img);
-      };
-      reader.readAsDataURL(file);
-    }
-
-    function preprocess(imageElement) {
-      const canvas = document.getElementById('hiddenCanvas');
-      const ctx = canvas.getContext('2d');
-      ctx.drawImage(imageElement, 0, 0, 224, 224);
-      const imgData = ctx.getImageData(0, 0, 224, 224).data;
-
-      const mean = [0.485, 0.456, 0.406];
-      const std = [0.229, 0.224, 0.225];
-
-      const floatData = new Float32Array(1 * 3 * 224 * 224);
-      const channelSize = 224 * 224;
-
-      for (let i = 0; i < channelSize; i++) {
-        const r = imgData[i * 4] / 255.0;
-        const g = imgData[i * 4 + 1] / 255.0;
-        const b = imgData[i * 4 + 2] / 255.0;
-
-        floatData[i] = (r - mean[0]) / std[0];
-        floatData[channelSize + i] = (g - mean[1]) / std[1];
-        floatData[2 * channelSize + i] = (b - mean[2]) / std[2];
-      }
-
-      return new ort.Tensor('float32', floatData, [1, 3, 224, 224]);
-    }
-
-    function softmax(arr) {
-      const max = Math.max(...arr);
-      const exp = arr.map(x => Math.exp(x - max));
-      const sum = exp.reduce((a, b) => a + b, 0);
-      return exp.map(x => x / sum);
-    }
-
-    async function runInference(img) {
-      const msg = document.getElementById('statusMsg');
-      msg.style.display = 'block';
-      msg.innerText = 'Analyzing botanical features & checking flower presence...';
-
-      try {
-        const tensor = preprocess(img);
-
-        // 1. MobileNetV2 (3-class output: [lily, not_a_flower, other_flowers])
-        let pTransfer = [0.33, 0.33, 0.34];
-        if (sessionTransfer) {
-          const outT = await sessionTransfer.run({ input: tensor });
-          pTransfer = softmax(Array.from(outT.output.data));
-        }
-
-        // 2. Custom CNN (3-class output)
-        let pScratch = [0.33, 0.33, 0.34];
-        if (sessionScratch) {
-          const outS = await sessionScratch.run({ input: tensor });
-          pScratch = softmax(Array.from(outS.output.data));
-        }
-
-        const isNonFlowerTransfer = updateUI('Transfer', pTransfer);
-        const isNonFlowerScratch = updateUI('Scratch', pScratch);
-
-        const alertBox = document.getElementById('nonFlowerAlert');
-        if (isNonFlowerTransfer || isNonFlowerScratch) {
-          alertBox.style.display = 'block';
-        } else {
-          alertBox.style.display = 'none';
-        }
-
-        document.getElementById('resultsGrid').style.display = 'grid';
-        msg.style.display = 'none';
-      } catch (err) {
-        msg.innerText = 'Error running inference: ' + err.message;
-      }
-    }
-
-    function updateUI(prefix, probs) {
-      // probs: [p_lily, p_not_flower, p_other]
-      const pLily = probs[0];
-      const pNotFlower = probs[1];
-      const pOther = probs[2];
-
-      const card = document.getElementById('card' + prefix);
-      const label = document.getElementById('label' + prefix);
-      const status = document.getElementById('status' + prefix);
-      const conf = document.getElementById('conf' + prefix);
-      const lilySpan = document.getElementById('lily' + prefix);
-      const otherSpan = document.getElementById('other' + prefix);
-      const bar = document.getElementById('bar' + prefix);
-
-      // Check if Not a Flower:
-      if (pNotFlower > 0.40 || (pNotFlower > pLily && pNotFlower > pOther)) {
-        label.innerText = 'Not a Flower 🚫';
-        status.innerText = 'Non-Flower Object Detected';
-        conf.innerText = 'Confidence: ' + (pNotFlower * 100).toFixed(1) + '% Non-Flower';
-        lilySpan.innerText = '0.0%';
-        otherSpan.innerText = '0.0%';
-        bar.style.width = '0%';
-        bar.className = 'bar-fill zero';
-        card.className = 'card nonflower';
-        return true;
-      } else {
-        // Genuine Flower detected! Normalize between Lily and Other Flowers
-        const flowerSum = pLily + pOther;
-        const lilyPct = flowerSum > 0 ? (pLily / flowerSum) * 100 : 50;
-        const otherPct = flowerSum > 0 ? (pOther / flowerSum) * 100 : 50;
-
-        if (lilyPct >= otherPct) {
-          label.innerText = 'Lily 🌸';
-          status.innerText = 'Flower Detected: Lily Variety';
-          conf.innerText = 'Confidence: ' + lilyPct.toFixed(1) + '%';
-          bar.className = 'bar-fill';
-          bar.style.width = lilyPct.toFixed(1) + '%';
-        } else {
-          label.innerText = 'Other Flowers 🌼';
-          status.innerText = 'Flower Detected: Non-Lily Flower';
-          conf.innerText = 'Confidence: ' + otherPct.toFixed(1) + '%';
-          bar.className = 'bar-fill red';
-          bar.style.width = otherPct.toFixed(1) + '%';
-        }
-
-        lilySpan.innerText = lilyPct.toFixed(1) + '%';
-        otherSpan.innerText = otherPct.toFixed(1) + '%';
-        card.className = prefix === 'Transfer' ? 'card highlight' : 'card';
-        return false;
-      }
-    }
-  </script>
+  <!-- Application Script -->
+  <script src="script.js"></script>
 </body>
 </html>
