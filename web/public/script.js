@@ -171,7 +171,9 @@ function loadSource(src) {
   img.src = src;
   img.onload = () => {
     activeImage = img;
-    preview.style.display = 'block';
+    preview.style.display = 'flex';
+    preview.style.alignItems = 'center';
+    preview.style.justifyContent = 'center';
     prompt.style.display = 'none';
     analyze();
   };

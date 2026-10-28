@@ -1,64 +1,47 @@
 # 📢 LinkedIn Post & Submission Materials
 
-## 1. LinkedIn Post Draft
-*Copy & paste this directly to your LinkedIn. Tag Prof. Dr Munir Ahmad and your university where indicated.*
+## 1. LinkedIn Post Caption (Copy & Paste)
 
 ```markdown
-🌸 Excited to share my latest Deep Learning & Computer Vision Semester Project: Lily Flower Classification & Open-Set Recognition System! 🌿
+🌸 Excited to unveil Florix AI — an end-to-end Deep Learning & Botanical Vision system capable of classifying Lily flowers with real-world Open-Set Non-Flower Rejection! 🌿
 
-As part of our Deep Learning coursework under the supervision of Prof. Dr Munir Ahmad, I developed an end-to-end computer vision system capable of distinguishing Lily flowers from other flower species, while solving real-world challenges like open-set non-flower rejection.
+As part of my Deep Learning Semester Project under the supervision of Prof. Dr Munir Ahmad, I tackled one of the most prominent flaws in production computer vision: the Closed-World Softmax Dilemma.
 
-🔑 Key Project Highlights:
+Traditional binary vision models force probabilities to sum to 1.0. When an arbitrary non-flower object (such as a sports car, laptop, or animal) is input, standard models falsely label it as a flower with high confidence. Florix AI solves this with a strict 3-class open-set gating engine: whenever a non-flower entity is detected, both Lily and Other Flowers outputs strictly collapse to 0.0%! 🛡️
 
-✅ 100% Self-Collected Botanical Dataset (No Kaggle):
-Curated 1,560 verified botanical images across 3 balanced classes:
-  1. True Lilies (Lilium Genus: Asiatic, Madonna, Tiger, Stargazer, Easter) + Dragon Lily (Dracunculus vulgaris) sourced from iNaturalist Research-Grade observations.
-  2. Other Flowers: Curated roses, tulips, sunflowers, daisies, and dandelions.
-  3. Non-Flower Background Class: Mammals, birds, insects, and objects.
+Here is what was engineered in this project:
 
-✅ The Data Quality Discovery (+27% Accuracy Leap):
-Discovered that unconstrained web scraping introduced ~32% noisy non-flower media. Rebuilding the dataset with research-grade verification elevated MobileNetV2 accuracy from 66.5% to 93.9%, proving that Data Quality > Data Quantity!
+📦 1. 15,276 Verified Botanical Images (Zero Scraper Noise):
+Following strict academic instructions, no pre-made Kaggle sets were used. The dataset was collected and verified across 3 balanced distributions:
+• 5,000 Verified Lilies (Lilium Genus: Asiatic, Stargazer, Tiger, Easter, Madonna) + Dragon Lily (Dracunculus vulgaris) from iNaturalist Open Data (AWS S3).
+• 5,276 Other Flower Blooms (Roses, Tulips, Sunflowers, Daisies, Dandelions) from TF Flowers.
+• 5,000 Non-Flower Objects (Mammals, vehicles, furniture, electronics) for open-set calibration.
 
-✅ Open-Set Non-Flower Rejection (0% Guarantee):
-Standard 2-class classifiers falsely classify non-flowers with high confidence. I engineered a 3-class rejection pipeline where any non-flower entity (car, person, animal, laptop) automatically yields 0.0% Lily and 0.0% Other Flowers.
+💡 2. The Data Quality Discovery (+18.6% Accuracy Leap):
+During initial web scraping, ~32% of scraped data consisted of noise (cladograms, pressed herbarium leaves, bow ties, medals). Removing this label noise and rebuilding with research-grade botanical flora caused MobileNetV2 validation accuracy to surge from 66.5% → 85.11%! Proof that Data Quality is far more critical than raw volume.
 
-✅ Comparative Architecture Study:
-  • Custom 4-Layer CNN (Trained from Scratch): 87.5% Validation Accuracy
-  • MobileNetV2 (Transfer Learning): 93.9% Validation Accuracy 🏆 (99.1% Lily Recall, 100% Other Flowers Precision)
+🧠 3. Comparative Architecture Study (N=3,055 Held-Out Validation):
+• Model 1: Custom 4-Layer CNN (Trained from Scratch) — 75.29% Val Accuracy (83.96% Lily recall, ~580K params).
+• Model 2: MobileNetV2 Transfer Learning (Pre-trained on ImageNet) — 85.11% Val Accuracy 🏆 (91.01% Lily recall, 90.35% non-flower rejection recall, 91.35% precision).
 
-✅ Production Deployment on Vercel:
-Exported PyTorch weights to ONNX Web format for client-side, zero-latency inference directly in the browser via ONNX Runtime Web.
+🌿 4. The Dragon Lily Challenge (High Intra-Class Variance):
+*Dracunculus vulgaris* violates standard 6-petal trumpet lily morphology with its dark spathe and tall spadix spike. By curating verified observations directly into training, MobileNetV2 identifies Dragon Lilies as authentic lilies with >90% confidence!
 
-🔗 Live Web App (Vercel): [Your Live Vercel URL Here]
+⚡ 5. Production In-Browser Deployment on Vercel:
+Exported trained PyTorch checkpoints to ONNX Web format (3.5 MB & 9.1 MB), executing client-side directly in the browser via ONNX Runtime Web (WASM). Zero backend server lag, zero compute costs, and 100% user data privacy!
+
+🔗 Live Artifacts & Project Links:
+🌐 Live Web App (Vercel): [Paste your Vercel Link here]
 💻 GitHub Repository: https://github.com/iamahmadishtiaq/lily-flower-classification
-📦 Download Dataset (ZIP): Available directly on the live website
-📄 Project Report (PDF/Word): Available directly on the live website
-📊 Presentation Slides (PPTX): Available directly on the live website
+🎬 YouTube Presentation Video: https://youtu.be/37qunhL2mKY
 
-Special thanks to my instructor Prof. Dr Munir Ahmad for the invaluable guidance throughout this semester project.
+All project artifacts (Dataset ZIP, PDF/Word Research Reports, PPTX Slides, and PyTorch .pth model weights) are available directly on the web application.
 
-Student: Ahmad Ishtiaq
-Roll No: SU92-BSCSM-F23-318 | Section: BSCS-7A
+Special thanks to our supervisor Prof. Dr Munir Ahmad for his mentorship and guidance throughout this semester project!
 
-#DeepLearning #ComputerVision #PyTorch #TransferLearning #ArtificialIntelligence #MachineLearning #ONNX #WebML #Vercel #DataQuality #SemesterProject
+👨‍🎓 Student: Ahmad Ishtiaq
+🔢 Roll No: SU92-BSCSM-F23-318
+📚 Section: BSCS-7A (Department of Computer Science)
+
+#DeepLearning #ComputerVision #MachineLearning #PyTorch #TransferLearning #MobileNetV2 #AI #WebML #ONNX #Vercel #FlowerClassification #DataQuality #DataScience #ArtificialIntelligence #SemesterProject
 ```
-
----
-
-## 2. Google Form / Assignment Submission Checklist
-
-| Field | Content to Paste |
-|:------|:----------------|
-| **Project Title** | Lily Flower Classification & Open-Set Recognition System |
-| **Course** | Deep Learning (Semester Project) |
-| **Student Name** | Ahmad Ishtiaq |
-| **Roll No** | SU92-BSCSM-F23-318 |
-| **Section** | BSCS-7A |
-| **Instructor** | Prof. Dr Munir Ahmad |
-| **Live Vercel URL** | `https://lily-flower-classification.vercel.app` (or your custom Vercel URL) |
-| **GitHub Repository URL** | `https://github.com/iamahmadishtiaq/lily-flower-classification` |
-| **Dataset Download** | Direct download available on frontend (`web/public/downloads/dataset.zip`) |
-| **Project Report** | `Project_Report.pdf` / `Project_Report.docx` (downloadable on frontend) |
-| **Presentation Slides** | `Lily_Classification_Presentation.pptx` (downloadable on frontend) |
-| **LinkedIn Post URL** | `https://lnkd.in/p/dKsvaJrU` |
-| **YouTube Video URL** | `https://youtu.be/37qunhL2mKY` |
